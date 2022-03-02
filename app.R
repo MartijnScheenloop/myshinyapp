@@ -48,10 +48,7 @@ shinyAppDir(
   )
 )
 ```
-
-
-Rijck
-
+RIJCKKJKC
 Note the use of the `height` parameter to determine how much vertical space the embedded application should occupy.
 
 You can also use the `shinyApp` function to define an application inline rather then in an external directory.
