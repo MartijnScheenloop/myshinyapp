@@ -35,7 +35,7 @@ renderPlot({
   lines(dens, col = "blue")
 })
 ```
-
+Tijmen
 ## Embedded Application
 
 It's also possible to embed an entire Shiny application within an R Markdown document using the `shinyAppDir` function. This example embeds a Shiny application located in another directory:
