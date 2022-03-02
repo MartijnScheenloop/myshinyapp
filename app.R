@@ -1,6 +1,6 @@
 ---
 title: "app.R"
-author: "Tijmen"
+author: "Tij"
 date: "3/2/2022"
 output: html_document
 runtime: shiny
