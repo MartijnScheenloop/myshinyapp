@@ -43,30 +43,29 @@ shinyUI(dashboardPage(
 
   
   dashboardBody(
-
-    tabItem(tabName = "hp",
-            h1("Welcome to our shiny application"),
-            h4("This application will offer you the opportunity to explore the data from all olympic games (1986 - 2016) through network analytics."),
-            br(),
-            p("The dataset to explore includes variables regarding every athletes: gender, name, weight, height, team and age"),
-            tags$head(tags$style("h1 {color: black; font-weight: bold; text-align: center;")),
-            tags$head(tags$style("h4 {color: black; font-weight: italic; text-align: center;")),
-            ),
-
-    tabItem(tabName = "hp"),
-
-    tabItem(tabName = "ds",
-            fluidRow(box(
-              htmlOutput("test"), width = 14
-            ))),
-    tabItem(tabName = "dd"),
-    tabItem(tabName = "ss"),
-    
-    tabItem(tabName = "ne"),
-    tabItem(tabName = "nv"),
-    tabItem(tabName = "nds"),
-    
-    tabItem(tabName = "nv1"),
-    tabItem(tabName = "nv2"),
+    tabItems(
+      tabItem(tabName = "hp",
+              h1("Welcome to our shiny application"),
+              h4("This application will offer you the opportunity to explore the data from all olympic games (1986 - 2016) through network analytics."),
+              br(),
+              p("The dataset to explore includes variables regarding every athletes: gender, name, weight, height, team and age"),
+              tags$head(tags$style("h1 {color: black; font-weight: bold; text-align: center;")),
+              tags$head(tags$style("h4 {color: black; font-weight: italic; text-align: center;")),
+      ),
+      
+      tabItem(tabName = "hp"),
+      
+      tabItem(tabName = "ds"),
+      tabItem(tabName = "dd",
+              h2("beter komt het er te staan")),
+      tabItem(tabName = "ss"),
+      
+      tabItem(tabName = "ne"),
+      tabItem(tabName = "nv"),
+      tabItem(tabName = "nds"),
+      
+      tabItem(tabName = "nv1"),
+      tabItem(tabName = "nv2")
+    )
   )
 ))
