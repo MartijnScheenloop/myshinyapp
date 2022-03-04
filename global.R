@@ -3,8 +3,9 @@
 library(shinydashboard)
 library(shiny)
 library(shinyWidgets)
-
+library(ggplot2)
 library(data.table)
+
 
 # Load the data
 dt.athletes.events <- fread("athlete_events.csv")
