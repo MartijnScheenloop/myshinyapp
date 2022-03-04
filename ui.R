@@ -10,6 +10,7 @@ shinyUI(dashboardPage(
     sidebarUserPanel("NDA Group 1"),
     
     sidebarMenu(
+      id = "tabs",
       menuItem(
         "Homepage",
          tabName = "hp", icon = icon("home")),
@@ -44,13 +45,17 @@ shinyUI(dashboardPage(
   dashboardBody(
     tabItem(tabName = "hp",
             h1("Welcome to our shiny application"),
-            h3("This application will offer you the opportunity to explore the data from all olympic games (1986 - 2016) through network analytics"),
+            h4("This application will offer you the opportunity to explore the data from all olympic games (1986 - 2016) through network analytics."),
             br(),
-            tags$head(tags$style("h1 {color: black; font-weight: bold; text-align: center;"))
+            p("The dataset to explore includes variables regarding every athletes: gender, name, weight, height, team and age"),
+            tags$head(tags$style("h1 {color: black; font-weight: bold; text-align: center;")),
+            tags$head(tags$style("h4 {color: black; font-weight: italic; text-align: center;")),
             ),
-  
     
-    tabItem(tabName = "ds"),
+    tabItem(tabName = "ds",
+            fluidRow(box(
+              htmlOutput("test"), width = 14
+            ))),
     tabItem(tabName = "dd"),
     tabItem(tabName = "ss"),
     

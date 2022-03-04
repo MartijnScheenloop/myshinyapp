@@ -1,5 +1,9 @@
 ## global.R ##
 
+library(shinydashboard)
+library(shiny)
+library(shinyWidgets)
+
 # Load the data
 athletes_events = read.csv(file = "athlete_events.csv")
 noc_regions = read.csv(file = "noc_regions.csv")
