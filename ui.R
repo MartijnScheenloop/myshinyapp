@@ -3,6 +3,7 @@
 library(shinydashboard)
 library(shiny)
 
+# Create the dashboard
 shinyUI(dashboardPage(
   dashboardHeader(title = "Olympics Network Analytics"),
   dashboardSidebar(
