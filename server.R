@@ -1,4 +1,6 @@
 ## server.R ##
 
-shinyServer(function(input, output){})
+shinyServer(function(input, output){
+  
+})
 

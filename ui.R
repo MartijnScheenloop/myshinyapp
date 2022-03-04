@@ -3,7 +3,7 @@
 library(shinydashboard)
 library(shiny)
 
-# Create the dashboard
+# Create the Dashboard
 shinyUI(dashboardPage(
   dashboardHeader(title = "Olympics Network Analytics"),
   dashboardSidebar(
@@ -42,7 +42,12 @@ shinyUI(dashboardPage(
 
   
   dashboardBody(
-    tabItem(tabName = "hp"),
+    tabItem(tabName = "hp",
+            h1("Welcome to our shiny application"),
+            h3("This application will offer you the opportunity to explore the data from all olympic games (1986 - 2016) through network analytics"),
+            br(),
+            tags$head(tags$style("h1 {color: black; font-weight: bold; text-align: center;"))
+            ),
   
     
     tabItem(tabName = "ds"),
