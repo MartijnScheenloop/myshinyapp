@@ -67,12 +67,12 @@ shinyUI(dashboardPage(
               br(),
               
               fluidRow(
-                column(width = 3, align="center", 
+                column(width = 3, 
                        wellPanel(
                          h4("Rows"),
                          h3("271.116")),
                 ),
-                column(width = 3,  align="center", 
+                column(width = 3, 
                        wellPanel(
                          h4("Columns"),
                          h3("15")),
@@ -160,123 +160,45 @@ shinyUI(dashboardPage(
                 ),
               ),
       ),
-              tabItem(tabName = "ss",
-                      h2("Descriptive Statistics"),
-                      
-                      # Games dropdown filter
-                      pickerInput(inputId = "games",
-                                  label = "Select the Games",
-                                  choices = sort(unique(dt.olympics[!is.na(Games)]$Games), decreasing = FALSE),
-                                  width = "40%",
-                                  options = list(`actions-box` = TRUE),
-                                  multiple = T
-                      ),
-                      
-                      # Sport dropdown filter
-                      pickerInput(inputId = "sport",
-                                  label = "Select a sport",
-                                  choices = sort(unique(dt.olympics[!is.na(Sport)]$Sport), decreasing = FALSE),
-                                  width = "40%",
-                                  options = list(`actions-box` = TRUE),
-                                  multiple = T
-                      ),
-                      
-                      # Region dropdown filter
-                      pickerInput(inputId = "region",
-                                  label = "Select a region",
-                                  choices = sort(unique(dt.olympics[!is.na(region)]$region), decreasing = FALSE),
-                                  width = "40%",
-                                  options = list(`actions-box` = TRUE),
-                                  multiple = T
-                      ),
-                      
-                      # Gender dropdown filter
-                      pickerInput(inputId = "num",
-                                  label = "Select a gender",
-                                  choices = sort(unique(dt.olympics[!is.na(Sex)]$Sex), decreasing = FALSE),
-                                  width = "40%",
-                                  options = list(`actions-box` = TRUE),
-                                  multiple = T
-                      ),
-                      
-                      # Season dropdown filter
-                      pickerInput(inputId = "season",
-                                  label = "Select a season",
-                                  choices = sort(unique(dt.olympics[!is.na(Season)]$Season), decreasing = FALSE),
-                                  width = "40%",
-                                  options = list(`actions-box` = TRUE),
-                                  multiple = T
-                      ),
-                      
-                      # Age slider filter
-                      sliderInput(inputId = "num", 
-                                  label = "Choose an age", 
-                                  value = 20,
-                                  min = min(dt.olympics[!is.na(Age)]$Age), 
-                                  max = max(dt.olympics[!is.na(Age)]$Age)),
-                      
-                      plotOutput("ss")
-                      
-              ),
-              
-              
+      
       tabItem(tabName = "ss",
               h2("Descriptive Statistics"),
               
-              # Games dropdown filter
-              pickerInput(inputId = "games",
-                          label = "Select the Games",
-                          choices = sort(unique(dt.olympics[!is.na(Games)]$Games), decreasing = FALSE),
-                          width = "40%",
-                          options = list(`actions-box` = TRUE),
-                          multiple = T
-              ),
-              
-              # Sport dropdown filter
-              pickerInput(inputId = "num",
-                          label = "Select a sport",
-                          choices = sort(unique(dt.olympics[!is.na(Sport)]$Sport), decreasing = FALSE),
-                          width = "40%",
-                          options = list(`actions-box` = TRUE),
-                          multiple = T
-              ),
-              
-              # Region dropdown filter
-              pickerInput(inputId = "num",
-                          label = "Select a region",
-                          choices = sort(unique(dt.olympics[!is.na(region)]$region), decreasing = FALSE),
-                          width = "40%",
-                          options = list(`actions-box` = TRUE),
-                          multiple = T
-              ),
-              
-              # Gender dropdown filter
-              pickerInput(inputId = "num",
-                          label = "Select a gender",
-                          choices = sort(unique(dt.olympics[!is.na(Sex)]$Sex), decreasing = FALSE),
-                          width = "40%",
-                          options = list(`actions-box` = TRUE),
-                          multiple = T
-              ),
-              
-              # Season dropdown filter
-              pickerInput(inputId = "num",
-                          label = "Select a season",
-                          choices = sort(unique(dt.olympics[!is.na(Season)]$Season), decreasing = FALSE),
-                          width = "40%",
-                          options = list(`actions-box` = TRUE),
-                          multiple = T
-              ),
-              
-              # Age slider filter
-              sliderInput(inputId = "num", 
-                          label = "Choose an age", 
-                          value = 20,
-                          min = min(dt.olympics[!is.na(Age)]$Age), 
-                          max = max(dt.olympics[!is.na(Age)]$Age)),
-              
-              plotOutput("ss")
-              
+              fluidRow(
+                column(4,
+                       wellPanel(
+                         sliderInput(
+                           inputId = "years",
+                           label = "Years",
+                           value = c(min(dt.olympics$Year, na.rm = TRUE), max(dt.olympics$Year, na.rm = TRUE)),
+                           min = min(dt.olympics$Year, na.rm = TRUE),
+                           max = max(dt.olympics$Year, na.rm = TRUE),
+                           step = 1,
+                           sep = ""))
+                ),
+                column(2,
+                       wellPanel(
+                         pickerInput(
+                           inputId = "sex",
+                           label = "Select a gender",
+                           choices = c("All",sort(unique(dt.olympics[!is.na(Sex)]$Sex))),
+                           width = "40%",
+                           options = list(`actions-box` = TRUE),
+                           multiple = T,
+                           selected = "All"))
+                ),
+                column(2,
+                       wellPanel(
+                         pickerInput(inputId = "season",
+                                     label = "Select a season",
+                                     choices = c("All",sort(unique(dt.olympics[!is.na(Season)]$Season))),
+                                     width = "40%",
+                                     options = list(`actions-box` = TRUE),
+                                     multiple = T,
+                                     selected = "All"))
+                ),
+                DT::dataTableOutput("table")
+              )
       ),
       
       tabItem(tabName = "nv"),

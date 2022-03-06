@@ -5,6 +5,7 @@ library(shiny)
 library(shinyWidgets)
 library(ggplot2)
 library(data.table)
+library(varhandle)
 
 
 # Load the data
