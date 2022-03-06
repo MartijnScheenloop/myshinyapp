@@ -67,7 +67,7 @@ shinyUI(dashboardPage(
               h2("Descriptive Statistics"),
               
               # Games dropdown filter
-              pickerInput(inputId = "num",
+              pickerInput(inputId = "games",
                           label = "Select the Games",
                           choices = sort(unique(dt.olympics[!is.na(Games)]$Games), decreasing = FALSE),
                           width = "40%",
