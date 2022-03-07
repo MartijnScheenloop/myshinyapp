@@ -5,7 +5,7 @@ shinyServer(function(input, output, body){
   output$table <- DT::renderDataTable(DT::datatable({
     data <- dt.olympics
     
-    # filter
+    # year, gender and season filter
     if (input$sex != "All") {
       data <- data[data$Sex == input$sex,]
     }
@@ -14,19 +14,24 @@ shinyServer(function(input, output, body){
     }
     data <- data[data$Year >= min(input$years) & data$Year <= max(input$years),]
     
-    # opmaak
+    # presentation of data set, following steps:
+    # 1. subset with only relevant data to decrease calculation size
     data  <- subset(data , select = c(region, Medal))
+    # 2. convert medal column to 3 binary columns per medal sort
     medals <- to.dummy(data $Medal, "medals")
     data <-cbind(data , medals)
+    # 3. using aggregate function to find totals per country and change name
     dt.bronze <- aggregate(data$medals.Bronze, by=list(region=data$region), FUN=sum)
     names(dt.bronze)[names(dt.bronze)=="x"] <- "Bronze_medals"
     dt.silver <- aggregate(data$medals.Silver, by=list(region=data$region), FUN=sum)
     names(dt.silver)[names(dt.silver)=="x"] <- "Silver_medals"
     dt.gold <- aggregate(data$medals.Gold, by=list(region=data$region), FUN=sum)
     names(dt.gold)[names(dt.gold)=="x"] <- "Gold_medals"
+    # 4. combine three agrregate functions per sort of medal back into one dt
     data <- cbind(dt.bronze, dt.silver, dt.gold)
     data <- subset(data, select = c(region, Bronze_medals, Silver_medals, Gold_medals))
     data$Total_medals = rowSums(data[,c("Bronze_medals", "Silver_medals", "Gold_medals")])
+    # 5. order from high to low
     data <- data[order(-data$Total_medals),]
     
     data
