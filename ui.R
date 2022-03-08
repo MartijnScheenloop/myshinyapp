@@ -5,9 +5,10 @@ library(shiny)
 
 # Create the dashboard
 shinyUI(dashboardPage(
+  skin = "green",
   dashboardHeader(title = "Olympics Network Analytics"),
   dashboardSidebar(
-    sidebarUserPanel("NDA Group 1"),
+    sidebarUserPanel(img(src = "olympicrings.png", style="display: block; margin-left: auto; margin-right: auto;")),
     
     sidebarMenu(
       id = "tabs",
@@ -16,21 +17,24 @@ shinyUI(dashboardPage(
          tabName = "hp", icon = icon("home")),
       
       menuItem(
-        "General Descriptive Statistics",
+        "Descriptive Statistics",
+        icon = icon("fa-solid fa-calculator"),
          tabName = "ds",
          menuSubItem("Description of Dataset", tabName = 'dd'),
          menuSubItem("Summary Statistics", tabName = "ss")
         ),
       
       menuItem(
-        "Network Exploration", 
+        "Network Exploration",
+        icon = icon("bar-chart-o"), 
          tabName = "ne",
          menuSubItem("Network Visualization", tabName = "nv"),
          menuSubItem("Network Descriptive Statistics", tabName = "nds")
         ),
       
       menuItem(
-        "Network Analysis", 
+        "Network Analysis",
+        icon = icon("fa-solid fa-globe"),
         tabName = "na",
         menuSubItem("Network Visualization 1", tabName = "nv1"),
         menuSubItem("Network Visualization 2", tabName = "nv2")
@@ -38,7 +42,8 @@ shinyUI(dashboardPage(
       
       menuItem(
         "About the Creators",
-         tabName = "atc")
+         tabName = "atc",
+        icon = icon("fa-solid fa-address-book"))
   )),
 
   
@@ -47,17 +52,21 @@ shinyUI(dashboardPage(
       ## Homepage with welcome message and general information
       tabItem(tabName = "hp",
               h1("Welcome to our shiny application!"),
-              img(src = "hpimage.png", height = 500, width = 1100),
+              img(src = "hpimage-modified.png", height = 500, width = "100%", inline = FALSE),
               h4("This application will offer you the opportunity to explore the data from all olympic games (1896 - 2016) through network analytics."),
               br(),
-              p("We have merged two seperate csv files derived from Kaggle in order to provide a most wholsesome interpretation of the history of the olympic games.
-                In the merged dataset one can find variables regarding an athletes age, gender, name, weight and team. Furthermore,
-                information regarding NOC year, city, sport, event, games and medal can be found."),
-              p("There is no data from 1916, 1940 and 1944 because in those years the olypmic games got cancelled as a results of WW1 and WW2.
-                It must be noted that due to a US boycot in 1980 the data from that year is limited. Another noteable observation is that the summer
-                and winter olympics where held in the same year up untill 1994, after that the summer and winter olympic began alternating every two years."),
+              p("This application runs on a merged csv file derived from Kaggle. The first csv file contained variables regarding an athletes age,
+              gender, name, weight and team. The second csv file contained vatiables regarding NOC year, city, sport, event, games and medals.
+              The csv files have been merged into a single file in order to provide a more wholesome interpretation of the history of the
+              olympic games. This application provides an interactive exploration of the dataset through descriptive statistics, network
+              exploration and one elaborate network analysis. Noticeable observations are that there is no data from 1916, 1940 and
+              1944 because in those years the olypmic games got cancelled as a results of WW1 and WW2. It furthermore must be noted that
+              due to a US boycot in 1980 the data from that year is limited. Another noteable observation is that the summer
+              and winter olympics where held in the same year up untill 1994, after that the summer and winter olympic began alternating
+              every two years."),
               tags$head(tags$style("h1 {color: black; font-weight: bold; text-align: center;")),
               tags$head(tags$style("h4 {color: black; font-weight: italic; text-align: center;")),
+              tags$head(tags$style("p {color:black; font-size: 15px; font-weight: italic; border-style: double;}")),
       ),
       
       tabItem(tabName = "dd",
@@ -67,6 +76,7 @@ shinyUI(dashboardPage(
               br(),
               
               fluidRow(
+
                 column(width = 3, 
                        wellPanel(
                          h4("Rows"),
@@ -197,7 +207,17 @@ shinyUI(dashboardPage(
                                      multiple = T,
                                      selected = "All"))
                 ),
-                DT::dataTableOutput("table")
+                DT::dataTableOutput("table"),
+                column(width = 9,
+                       p("While exploring the descriptve statistics of the olympic games dataset it can be seen that the USA momentarely
+                         has the most medals out of all the participating countries. It can further more be inferred that the USA has
+                         the highest amount of average medals per olympic games, closely followed by Russia. It seems logical that 
+                         the USA and Russia have the highest total and average amount of medals when taking the size and competition
+                         between these two countries into account. While taking this into account it becomes less apparent that China
+                         does not belong to the top of the table. It must be mentioned that China has considerably less total participations
+                         than the USA and China but when looking at China's average amount of medals per game the country does not even
+                         come close to the USA and China.")
+                       ),
               )
       ),
       
@@ -219,7 +239,7 @@ shinyUI(dashboardPage(
               fluidRow(
                 column(width = 3,
                        h4("Tijmen Pauli"),
-                       img(src = "tijmen.png", height = 200, width = 200, style="display: block; margin-left: auto; margin-right: auto;"),
+                       img(src = "tijmen-modified.png", height = 200, width = 200, style="display: block; margin-left: auto; margin-right: auto;"),
                        h4("624333tp"),
                        h5("Favorite Sporting Event: Figure Skating"),
                        tags$head(tags$style("h4 {color:black; font-weight: bold; text-align:center;}")),
@@ -227,7 +247,7 @@ shinyUI(dashboardPage(
                        ),
                 column(width = 3,
                        h4("Martijn Scheenloop"),
-                       img(src = "martijn.jpg", height = 200, width = 200, style="display: block; margin-left: auto; margin-right: auto;"),
+                       img(src = "martijn-modified.png", height = 200, width = 200, style="display: block; margin-left: auto; margin-right: auto;"),
                        h4("460707"),
                        h5("Favorite Sporting Event: 100M Dash"),
                        tags$head(tags$style("h4 {color:black; font-weight: bold; text-align:center;}")),
@@ -235,7 +255,7 @@ shinyUI(dashboardPage(
                 ),
                 column(width = 3,
                        h4("Stephan Bos"),
-                       img(src = "stephan.png", height = 200, width = 200, style="display: block; margin-left: auto; margin-right: auto;"),
+                       img(src = "stephan-modified.png", height = 200, width = 200, style="display: block; margin-left: auto; margin-right: auto;"),
                        h4("610219hb"),
                        h5("Favorite Sporting Event: 200M hordes"),
                        tags$head(tags$style("h4 {color:black; font-weight: bold; text-align:center;}")),
@@ -243,9 +263,12 @@ shinyUI(dashboardPage(
                 ),
                 column(width = 3,
                        h4("Rijck Dijksterhuis"),
-                       img(src = "rijck.png", height = 200, width = 200, style="display: block; margin-left: auto; margin-right: auto;"),
+                       img(src = "rijck-modified.png", height = 200, width = 200, style="display: block; margin-left: auto; margin-right: auto;"),
                        h4("424395nd"),
                        h5("Favorite Sporting Event: Skeleton"),
+                       p("Rijck was formely set out to major in Finance. During the corona pandemic he started a period of self-reflection
+                         which led him to reconsider his decision and choose to major in Business Information Management at the 
+                         Rotterdam School of Management"),
                        tags$head(tags$style("h4 {color:black; font-weight: bold; text-align:center;}")),
                        tags$head(tags$style("h5 {color:black; font-weight: italic; text-align:center;}")),
                 ),
