@@ -8,7 +8,8 @@ shinyUI(dashboardPage(
   skin = "green",
   dashboardHeader(title = "Olympics Network Analytics"),
   dashboardSidebar(
-    sidebarUserPanel(img(src = "olympicrings.png", style="display: block; margin-left: auto; margin-right: auto;")),
+    sidebarUserPanel(img(src = "olympicrings.png",
+                         style = "display: block; margin-left: auto; margin-right: auto;")),
     
     sidebarMenu(
       id = "tabs",
@@ -52,7 +53,8 @@ shinyUI(dashboardPage(
     tabItems(
       tabItem(tabName = "wm",
               fluidRow(box(
-                htmlOutput("wm"), width = 10
+                htmlOutput("wm"), width = "100%",
+                p("Dit is een test")
               ))),
       ## Homepage with welcome message and general information
       tabItem(tabName = "hp",
@@ -237,7 +239,8 @@ shinyUI(dashboardPage(
       # About us page content #
       tabItem(tabName = "atc",
               h1("About Us"),
-              h3("We are the team of scholars that have created this application. We have had interest from many parties so invest now while you still can!"),
+              h3("We are the team of scholars that have created this application.
+                 We have had interest from many parties so invest now while you still can!"),
               br(),
               tags$head(tags$style("h1 {color:black; font-weight: bold;}")),
               tags$head(tags$style("h3 {color:black; font-weight: italic; text-align: center;}")),
@@ -246,7 +249,8 @@ shinyUI(dashboardPage(
               fluidRow(
                 column(width = 3,
                        h4("Tijmen Pauli"),
-                       img(src = "tijmen-modified.png", height = 200, width = 200, style="display: block; margin-left: auto; margin-right: auto;"),
+                       img(src = "tijmen-modified.png", height = 200, width = 200,
+                           style="display: block; margin-left: auto; margin-right: auto;"),
                        h4("624333tp"),
                        h5("Favorite Sporting Event: Figure Skating"),
                        tags$head(tags$style("h4 {color:black; font-weight: bold; text-align:center;}")),
@@ -254,7 +258,8 @@ shinyUI(dashboardPage(
                        ),
                 column(width = 3,
                        h4("Martijn Scheenloop"),
-                       img(src = "martijn-modified.png", height = 200, width = 200, style="display: block; margin-left: auto; margin-right: auto;"),
+                       img(src = "martijn-modified.png", height = 200, width = 200,
+                           style="display: block; margin-left: auto; margin-right: auto;"),
                        h4("460707"),
                        h5("Favorite Sporting Event: 100M Dash"),
                        tags$head(tags$style("h4 {color:black; font-weight: bold; text-align:center;}")),
@@ -262,7 +267,8 @@ shinyUI(dashboardPage(
                 ),
                 column(width = 3,
                        h4("Stephan Bos"),
-                       img(src = "stephan-modified.png", height = 200, width = 200, style="display: block; margin-left: auto; margin-right: auto;"),
+                       img(src = "stephan-modified.png", height = 200, width = 200,
+                           style="display: block; margin-left: auto; margin-right: auto;"),
                        h4("610219hb"),
                        h5("Favorite Sporting Event: 200M hordes"),
                        tags$head(tags$style("h4 {color:black; font-weight: bold; text-align:center;}")),
@@ -270,7 +276,8 @@ shinyUI(dashboardPage(
                 ),
                 column(width = 3,
                        h4("Rijck Dijksterhuis"),
-                       img(src = "rijck-modified.png", height = 200, width = 200, style="display: block; margin-left: auto; margin-right: auto;"),
+                       img(src = "rijck-modified.png", height = 200, width = 200,
+                           style="display: block; margin-left: auto; margin-right: auto;"),
                        h4("424395nd"),
                        h5("Favorite Sporting Event: Skeleton"),
                        p("Rijck was formely set out to major in Finance. During the corona pandemic he started a period of self-reflection

@@ -47,7 +47,7 @@ dt.country.medals$Country = as.character(dt.country.medals$Country)
 dt.country.medals$Country
 
 # create and add string of medals to dt.country.medals
-dt.country.medals$s_medals <- paste0(dt.country.medals$Medal, " : ", dt.country.medals$n)
+dt.country.medals$s_medals <- paste0(dt.country.medals$Medal, " = ", dt.country.medals$n)
 
 dt.country.medals.final <- group_by(dt.country.medals, Country)
 dt.country.medals.final <- mutate(dt.country.medals.final,
