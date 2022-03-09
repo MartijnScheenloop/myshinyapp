@@ -28,6 +28,8 @@ dt.olympics <- merge(dt.athletes.events, dt.regions[, list(NOC, region)],
 # This was not included in dt.regions
 dt.olympics[NOC == "SGP"]$region = "Singapore"
 
+# Remove rows with NA as Event, are useless
+dt.olympics <- dt.olympics[!is.na(Event)]
 
 # New data table containing medals per country
 dt.country.medals = dt.olympics %>% na.omit() %>% group_by(., region) %>% count(., Medal)
