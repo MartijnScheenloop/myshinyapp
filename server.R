@@ -9,9 +9,15 @@ shinyServer(function(input, output, body){
     if (input$sex != "All") {
       data <- data[data$Sex == input$sex,]
     }
+    
     if (input$season != "All") {
       data <- data[data$Season == input$season,]
     }
+    
+    if (input$event != "All") {
+      data <- data[data$Event == input$Event,]
+    }
+    
     data <- data[data$Year >= min(input$years) & data$Year <= max(input$years),]
     
     # presentation of data set, following steps:

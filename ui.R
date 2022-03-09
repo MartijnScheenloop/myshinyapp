@@ -194,23 +194,23 @@ shinyUI(dashboardPage(
                            step = 1,
                            sep = ""))
                 ),
-                column(2,
+                column(3,
                        wellPanel(
                          pickerInput(
                            inputId = "sex",
                            label = "Select a gender",
                            choices = c("All",sort(unique(dt.olympics[!is.na(Sex)]$Sex))),
-                           width = "110%",
+                           width = "100%",
                            options = list(`actions-box` = TRUE),
                            multiple = T,
                            selected = "All"))
                 ),
-                column(2,
+                column(3,
                        wellPanel(
                          pickerInput(inputId = "season",
                                      label = "Select a season",
                                      choices = c("All",sort(unique(dt.olympics[!is.na(Season)]$Season))),
-                                     width = "110%",
+                                     width = "100%",
                                      options = list(`actions-box` = TRUE),
                                      multiple = T,
                                      selected = "All"))
@@ -242,7 +242,23 @@ shinyUI(dashboardPage(
                 their athletes, which is what this network is about. This network shows the regions as nodes that are
                 connected to each other when they have participated in the same sporting event."),
               
-              ),
+              fluidRow(
+                column(2,
+                       wellPanel(
+                         
+                         pickerInput(inputId = "event",
+                                     label = "Select an event",
+                                     choices = c("All",sort(unique(dt.olympics[!is.na(Event)]$Event))),
+                                     width = "100%",
+                                     options = list(`actions-box` = TRUE),
+                                     multiple = T,
+                                     selected = "All"),
+                         
+                         )
+                       )
+                )
+      ),
+
       tabItem(tabName = "nv2"),
       
       # About us page content #
