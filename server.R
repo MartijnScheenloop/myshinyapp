@@ -52,7 +52,7 @@ shinyServer(function(input, output, body){
   }))
   
   dt.country.medals.final$country_medals_string =
-        paste(dt.country.medals.final$Country[1:133],
+      paste(dt.country.medals.final$Country[1:133],
             dt.country.medals.final$country_medals_string[1:133], sep = " - ")
   
   output$wm = renderGvis ( {

@@ -214,7 +214,9 @@ shinyUI(dashboardPage(
                 ),
                 DT::dataTableOutput("table"),
                 column(width = 9,
-                       p("While exploring the descriptve statistics of the olympic games dataset it can be seen that the USA momentarely
+                       p("It first must be noted that the medals counts found in the tabel are the sum of the all the medals received
+                         by a country's atheletes. Meaning that if a football teams wins gold this counts as 11 gold medals instead of
+                         1. While exploring the descriptve statistics of the olympic games dataset it can be seen that the USA momentarely
                          has the most medals out of all the participating countries. It can further more be inferred that the USA has
                          the highest amount of average medals per olympic games, closely followed by Russia. It seems logical that 
                          the USA and Russia have the highest total and average amount of medals when taking the size and competition
