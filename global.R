@@ -15,10 +15,18 @@ library(dplyr)
 dt.athletes.events <- fread("athlete_events.csv")
 dt.regions <- fread("noc_regions.csv")
 
+# Replace NAs in region (ROT, TUV, UNK)
+dt.regions[is.na(region)]$region = dt.regions[is.na(region)]$notes
+
 # Merge all data
 dt.olympics <- merge(dt.athletes.events, dt.regions[, list(NOC, region)],
                      by = 'NOC', 
                      all = TRUE)
+
+# Replace NAs in region for dt.olympics
+# NOC of Singapore was changed from SIN to SGP
+# This was not included in dt.regions
+dt.olympics[NOC == "SGP"]$region = "Singapore"
 
 
 # New data table containing medals per country
