@@ -24,11 +24,11 @@ shinyServer(function(input, output, body){
     
     # 3. using aggregate function to find totals per country and change name
     dt.bronze <- aggregate(data$medals.Bronze, by=list(region=data$region), FUN=sum)
-    names(dt.bronze)[names(dt.bronze)=="x"] <- "Bronze_medals"
+    names(dt.bronze)[names(dt.bronze)== "x"] <- "Bronze_medals"
     dt.silver <- aggregate(data$medals.Silver, by=list(region=data$region), FUN=sum)
-    names(dt.silver)[names(dt.silver)=="x"] <- "Silver_medals"
+    names(dt.silver)[names(dt.silver)== "x"] <- "Silver_medals"
     dt.gold <- aggregate(data$medals.Gold, by=list(region=data$region), FUN=sum)
-    names(dt.gold)[names(dt.gold)=="x"] <- "Gold_medals"
+    names(dt.gold)[names(dt.gold)== "x"] <- "Gold_medals"
     
     # 4. combine three aggregate functions datasets per sort of medal back into one dt
     data <- cbind(dt.bronze, dt.silver, dt.gold)
