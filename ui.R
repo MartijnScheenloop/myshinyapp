@@ -80,7 +80,7 @@ shinyUI(dashboardPage(
       tabItem(tabName = "dd",
               h2("Description of Dataset"),
               br(),
-              h3("Each row representing an athlete competing in an olympic event"),
+              h3("Each row represents an athlete competing in an olympic event"),
               br(),
               
               fluidRow(
@@ -103,7 +103,7 @@ shinyUI(dashboardPage(
                 column(width = 2,
                        wellPanel(
                          h4("ID"),
-                         h6("Unique athlete"),
+                         h6("Unique athlete ID"),
                          tags$head(tags$style("h6 {color:black; text-align:center;}"))),
                 ),
                 column(width = 2,
@@ -119,12 +119,12 @@ shinyUI(dashboardPage(
                 column(width = 2,
                        wellPanel(
                          h4("Age"),
-                         h6("Integer")),
+                         h6("Athlete's age")),
                 ),
                 column(width = 2,
                        wellPanel(
                          h4("Height"),
-                         h6("In centimemters")),
+                         h6("In centimeters")),
                 ),
                 column(width = 2,
                        wellPanel(
@@ -134,7 +134,7 @@ shinyUI(dashboardPage(
                 column(width = 2,
                        wellPanel(
                          h4("Team"),
-                         h6("Team name")),
+                         h6("National team")),
                 ),
                 column(width = 2,
                        wellPanel(
@@ -149,7 +149,7 @@ shinyUI(dashboardPage(
                 column(width = 2,
                        wellPanel(
                          h4("Year"),
-                         h6("Integer")),
+                         h6("Year of Games")),
                 ),
                 column(width = 2,
                        wellPanel(
@@ -164,12 +164,12 @@ shinyUI(dashboardPage(
                 column(width = 2,
                        wellPanel(
                          h4("Sport"),
-                         h6("Sport")),
+                         h6("Sports category")),
                 ),
                 column(width = 2,
                        wellPanel(
                          h4("Event"),
-                         h6("Event")),
+                         h6("Sport's event")),
                 ),
                 column(width = 2,
                        wellPanel(
