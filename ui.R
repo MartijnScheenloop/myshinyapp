@@ -54,7 +54,8 @@ shinyUI(dashboardPage(
       tabItem(tabName = "wm",
               fluidRow(box(
                 htmlOutput("wm"), width = "100%",
-                p("Dit is een test")
+                p("This tab displays the world map. When you hover over a country the amount of medals won by that
+                  country will be displayed.")
               ))),
       ## Homepage with welcome message and general information
       tabItem(tabName = "hp",
@@ -276,8 +277,7 @@ shinyUI(dashboardPage(
                 ),
                 column(width = 3,
                        h4("Rijck Dijksterhuis"),
-                       img(src = "rijck-modified.png", height = 200, width = 200,
-                           style="display: block; margin-left: auto; margin-right: auto;"),
+                       img(src = "rijck-modified.png", height = 200, width = 200, style="display: block; margin-left: auto; margin-right: auto;"),
                        h4("424395nd"),
                        h5("Favorite Sporting Event: Skeleton"),
                        p("Rijck was formely set out to major in Finance. During the corona pandemic he started a period of self-reflection
