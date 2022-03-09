@@ -21,7 +21,8 @@ shinyUI(dashboardPage(
         icon = icon("fa-solid fa-calculator"),
          tabName = "ds",
          menuSubItem("Description of Dataset", tabName = 'dd'),
-         menuSubItem("Summary Statistics", tabName = "ss")
+         menuSubItem("Summary Statistics", tabName = "ss"),
+         menuSubItem("World Map", tabName = "wm")
         ),
       
       menuItem(
@@ -49,6 +50,10 @@ shinyUI(dashboardPage(
   
   dashboardBody(
     tabItems(
+      tabItem(tabName = "wm",
+              fluidRow(box(
+                htmlOutput("wm"), width = 10
+              ))),
       ## Homepage with welcome message and general information
       tabItem(tabName = "hp",
               h1("Welcome to our shiny application!"),
