@@ -14,10 +14,6 @@ shinyServer(function(input, output, body){
       data <- data[data$Season == input$season,]
     }
     
-    if (input$event != "All") {
-      data <- data[data$Event == input$Event,]
-    }
-    
     data <- data[data$Year >= min(input$years) & data$Year <= max(input$years),]
     
     # presentation of data set, following steps:
@@ -61,7 +57,7 @@ shinyServer(function(input, output, body){
       paste(dt.country.medals.final$Country[1:133],
             dt.country.medals.final$country_medals_string[1:133], sep = " - ")
   
-  output$wm = renderGvis ( {
+  output$wm <- renderGvis ( {
     gvisGeoChart(
       dt.country.medals.final,
       "Country",
@@ -73,5 +69,15 @@ shinyServer(function(input, output, body){
     )
   })
 
+  output$graph.table <- renderDataTable( {
+    # data <- dt.olympics
+    # 
+    # # Event filter - DOES NOT WORK YET
+    # if (input$event != "All") {
+    #   data <- data[data$Event == input$event,]
+    # }
+    dt.olympics
+  })
+  
 }
 )

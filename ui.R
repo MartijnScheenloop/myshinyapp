@@ -245,17 +245,16 @@ shinyUI(dashboardPage(
               fluidRow(
                 column(2,
                        wellPanel(
-                         
                          pickerInput(inputId = "event",
                                      label = "Select an event",
                                      choices = c("All",sort(unique(dt.olympics[!is.na(Event)]$Event))),
                                      width = "100%",
                                      options = list(`actions-box` = TRUE),
                                      multiple = T,
-                                     selected = "All"),
-                         
+                                     selected = "All")
                          )
-                       )
+                       ),
+                dataTableOutput("graph.table")
                 )
       ),
 
