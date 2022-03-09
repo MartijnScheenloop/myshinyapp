@@ -27,8 +27,14 @@ dt.olympics <- merge(dt.athletes.events, dt.regions[, list(NOC, region)],
 # NOC of Singapore was changed from SIN to SGP
 # This was not included in dt.regions
 dt.olympics[NOC == "SGP"]$region = "Singapore"
+<<<<<<< HEAD
 dt.olympics[NOC == "USA"]$region = "United States"
 dt.olympics[NOC == "UK"]$region = "United Kingdom"
+=======
+
+# Remove rows with NA as Event, are useless
+dt.olympics <- dt.olympics[!is.na(Event)]
+>>>>>>> fea64a25da6c964c0cebee978b06f381d50e2145
 
 # New data table containing medals per country
 dt.country.medals = na.omit(dt.olympics)
