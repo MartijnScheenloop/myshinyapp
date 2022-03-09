@@ -240,7 +240,7 @@ shinyUI(dashboardPage(
       # About us page content #
       tabItem(tabName = "atc",
               h1("About Us"),
-              h3("We are the team of scholars that have created this application.
+              h3("We are the team of students that have created this application.
                  We have had interest from many parties so invest now while you still can!"),
               br(),
               tags$head(tags$style("h1 {color:black; font-weight: bold;}")),
