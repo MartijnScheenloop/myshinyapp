@@ -27,19 +27,17 @@ dt.olympics <- merge(dt.athletes.events, dt.regions[, list(NOC, region)],
 # NOC of Singapore was changed from SIN to SGP
 # This was not included in dt.regions
 dt.olympics[NOC == "SGP"]$region = "Singapore"
-
+dt.olympics[NOC == "USA"]$region = "United States"
+dt.olympics[NOC == "UK"]$region = "United Kingdom"
 
 # New data table containing medals per country
-dt.country.medals = dt.olympics %>% na.omit() %>% group_by(., region) %>% count(., Medal)
+dt.country.medals = na.omit(dt.olympics)
+dt.country.medals = group_by(dt.country.medals, region)
+dt.country.medals = count(dt.country.medals, Medal)
 
 # Change column name for rworldmap
 colnames(dt.country.medals)[1] = "Country"
 dt.country.medals$Country = as.character(dt.country.medals$Country)
-dt.country.medals$Country
-
-# Change name of USA to match rworldmap name
-dt.country.medals[dt.country.medals$Country == "USA", ]$Country = "United States"
-dt.country.medals[dt.country.medals$Country == "UK", ]$Country = "United Kingdom"
 dt.country.medals$Country
 
 # create and add string of medals to dt.country.medals
