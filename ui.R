@@ -200,7 +200,7 @@ shinyUI(dashboardPage(
                            inputId = "sex",
                            label = "Select a gender",
                            choices = c("All",sort(unique(dt.olympics[!is.na(Sex)]$Sex))),
-                           width = "40%",
+                           width = "110%",
                            options = list(`actions-box` = TRUE),
                            multiple = T,
                            selected = "All"))
@@ -210,7 +210,7 @@ shinyUI(dashboardPage(
                          pickerInput(inputId = "season",
                                      label = "Select a season",
                                      choices = c("All",sort(unique(dt.olympics[!is.na(Season)]$Season))),
-                                     width = "40%",
+                                     width = "110%",
                                      options = list(`actions-box` = TRUE),
                                      multiple = T,
                                      selected = "All"))
@@ -234,7 +234,15 @@ shinyUI(dashboardPage(
       tabItem(tabName = "nv"),
       tabItem(tabName = "nds"),
       
-      tabItem(tabName = "nv1"),
+      tabItem(tabName = "nv1",
+              h2("Network Analysis on Regions"),
+              
+              p("This page shows a network analysis on the dataset of this app. The network aims to discover the relations
+                between the various regions in the dataset. Every region participates in several sports and events with
+                their athletes, which is what this network is about. This network shows the regions as nodes that are
+                connected to each other when they have participated in the same sporting event."),
+              
+              ),
       tabItem(tabName = "nv2"),
       
       # About us page content #
