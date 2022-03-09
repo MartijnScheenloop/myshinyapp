@@ -37,9 +37,9 @@ dt.olympics <- dt.olympics[!is.na(Event)]
 
 
 # New data table containing medals per country
-dt.country.medals = na.omit(dt.olympics)
-dt.country.medals = group_by(dt.country.medals, region)
-dt.country.medals = count(dt.country.medals, Medal)
+dt.country.medals <- na.omit(dt.olympics)
+dt.country.medals <- group_by(dt.country.medals, region)
+dt.country.medals <- count(dt.country.medals, Medal)
 
 # Change column name for rworldmap compatability
 colnames(dt.country.medals)[1] = "Country"
@@ -47,13 +47,13 @@ dt.country.medals$Country = as.character(dt.country.medals$Country)
 dt.country.medals$Country
 
 # create and add string of medals to dt.country.medals
-dt.country.medals$s_medals = paste0(dt.country.medals$Medal, " : ", dt.country.medals$n)
+dt.country.medals$s_medals <- paste0(dt.country.medals$Medal, " : ", dt.country.medals$n)
 
-dt.country.medals.final = group_by(dt.country.medals, Country)
-dt.country.medals.final = mutate(dt.country.medals.final,
+dt.country.medals.final <- group_by(dt.country.medals, Country)
+dt.country.medals.final <- mutate(dt.country.medals.final,
                                  country_medals_string = paste0(s_medals, collapse = " "))
-dt.country.medals.final = select(dt.country.medals.final, country_medals_string, Country)
-dt.country.medals.final = unique(dt.country.medals.final)
+dt.country.medals.final <- select(dt.country.medals.final, country_medals_string, Country)
+dt.country.medals.final <- unique(dt.country.medals.final)
 
 
 
