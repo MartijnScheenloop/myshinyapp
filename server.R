@@ -63,7 +63,7 @@ shinyServer(function(input, output, body){
       "Country",
       hovervar = "Total_medals",
       options = list(region = "world", displayMode = "regions",
-                     width = "100%",
+                     width = "1200",
                      height = "700"
       )
     )
