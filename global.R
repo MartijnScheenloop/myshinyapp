@@ -36,25 +36,43 @@ dt.olympics[NOC == "UK"]$region = "United Kingdom"
 dt.olympics <- dt.olympics[!is.na(Event)]
 
 
-# New data table containing medals per country
-dt.country.medals <- na.omit(dt.olympics)
-dt.country.medals <- group_by(dt.country.medals, region)
-dt.country.medals <- count(dt.country.medals, Medal)
+### Here the data for the worldmap is made ###
 
-# Change column name for rworldmap compatability
+# Create new data table to modify for the world map
+dt.all.data <- dt.olympics
+
+# We first trasnform the medal column into 3 columns
+# containing binary data for each medal sort
+medals <- to.dummy(dt.all.data $Medal, "medals")
+dt.country.medals <-cbind(dt.all.data , medals)
+
+# Next we calculate the total medals per country and rename
+# the column
+dt.bronze <- aggregate(dt.country.medals$medals.Bronze,
+                       by=list(region=dt.country.medals$region), FUN=sum)
+names(dt.bronze)[names(dt.bronze)== "x"] <- "Bronze_medals"
+
+dt.silver <- aggregate(dt.country.medals$medals.Silver,
+                       by=list(region=dt.country.medals$region), FUN=sum)
+names(dt.silver)[names(dt.silver)== "x"] <- "Silver_medals"
+
+dt.gold <- aggregate(dt.country.medals$medals.Gold,
+                     by=list(region=dt.country.medals$region), FUN=sum)
+names(dt.gold)[names(dt.gold)== "x"] <- "Gold_medals"
+
+# We know combine the separate medal data tables back into one data table
+dt.country.medals <- cbind(dt.bronze, dt.silver, dt.gold)
+
+dt.country.medals <- subset(dt.country.medals, select = 
+                              c(region, Bronze_medals, Silver_medals, Gold_medals))
+
+dt.country.medals$Total_medals = rowSums(dt.country.medals
+                                         [,c("Bronze_medals", "Silver_medals", "Gold_medals")])
+
+# Change the column names for rworldmap compatability
 colnames(dt.country.medals)[1] = "Country"
 dt.country.medals$Country = as.character(dt.country.medals$Country)
 dt.country.medals$Country
-
-# create and add string of medals to dt.country.medals in order to display
-# the amount of medals won on the world map.
-dt.country.medals$s_medals <- paste0(dt.country.medals$Medal, " = ", dt.country.medals$n)
-
-dt.country.medals.final <- group_by(dt.country.medals, Country)
-dt.country.medals.final <- mutate(dt.country.medals.final,
-                                 country_medals_string = paste0(s_medals, collapse = " "))
-dt.country.medals.final <- select(dt.country.medals.final, country_medals_string, Country)
-dt.country.medals.final <- unique(dt.country.medals.final)
 
 
 

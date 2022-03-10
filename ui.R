@@ -54,8 +54,8 @@ shinyUI(dashboardPage(
       tabItem(tabName = "wm",
               fluidRow(box(
                 htmlOutput("wm"), width = "100%",
-                p("This tab displays the world map. When you hover over a country the amount of medals won by that
-                  country will be displayed.")
+                p("This tab displays the world map. When you hover over a country the total
+                  amount of medals won by that country will be displayed.")
               ))),
       ## Homepage with welcome message and general information
       tabItem(tabName = "hp",

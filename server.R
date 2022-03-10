@@ -54,16 +54,16 @@ shinyServer(function(input, output, body){
   }))
   
   dt.country.medals.final$country_medals_string =
-      paste(dt.country.medals.final$Country[1:133],
-            dt.country.medals.final$country_medals_string[1:133], sep = " - ")
+      paste(dt.country.medals$Country[1:133],
+            dt.country.medals$Total_medals[1:133], sep = " - ")
   
   output$wm <- renderGvis ( {
     gvisGeoChart(
-      dt.country.medals.final,
+      dt.country.medals,
       "Country",
-      hovervar = "country_medals_string",
+      hovervar = "Total_medals",
       options = list(region = "world", displayMode = "regions",
-                     width = "1000",
+                     width = "100%",
                      height = "700"
       )
     )
