@@ -1,5 +1,8 @@
 ## global.R ##
 
+
+library(DT)
+library(igraph)
 library(shinydashboard)
 library(shiny)
 library(shinyWidgets)
@@ -74,4 +77,62 @@ dt.country.medals$Total_medals = rowSums(dt.country.medals
 colnames(dt.country.medals)[1] = "Country"
 dt.country.medals$Country = as.character(dt.country.medals$Country)
 dt.country.medals$Country
+
+# Network 1: Games and athletes after 2010 for boxing
+# Creating the right data frame
+dt.graph.games.final <- dt.olympics[Sport == "Boxing",]
+dt.graph.games <- dt.graph.games.final[Year >= 2010,]
+
+# Building the graph
+dt.all.athletes <- dt.graph.games[, list(name = unique(Name), type = TRUE)]
+dt.all.games <- dt.graph.games[, list(name = unique(Games), type = FALSE)]
+dt.vertices <- rbind(dt.all.athletes, dt.all.games)
+g.olympics <- graph.data.frame(dt.graph.games[, list(Games, Name)],
+                               directed = F,
+                               vertices = dt.vertices)
+
+# Centralities of the network
+# Degree 
+V(g.olympics)$degree <- degree(g.olympics)
+
+# closeness centrality
+V(g.olympics)$closeness <- closeness(g.olympics)
+
+# betweenness centrality
+V(g.olympics)$betweenness <- betweenness(g.olympics)
+
+# eigenvector centrality
+V(g.olympics)$evcent <- evcent(g.olympics)$vector
+
+
+
+# Network 2: Games and athletes football after 2010
+
+# Creating the right data frame
+dt.graph.football <- dt.olympics[Sport == "Football",]
+dt.graph.football.2010 <-dt.graph.football[Year >= 2010]
+
+# Building the graph
+dt.all.athletes.football.2010 <- dt.graph.football.2010[, list(name = unique(Name),
+                                                               type = TRUE)]
+dt.all.games.football.2010 <- dt.graph.football.2010[, list(name = unique(Games),
+                                                            type = FALSE)]
+dt.vertices.football.2010 <- rbind(dt.all.athletes.football.2010,
+                                   dt.all.games.football.2010)
+g.olympics.football.2010 <- graph.data.frame(dt.graph.football.2010[, list(Games, Name)],
+                                             directed = F,
+                                             vertices = dt.vertices.football.2010)
+
+# Centralities of the network
+# Degree centrality
+V(g.olympics.football.2010)$degree <- degree(g.olympics.football.2010)
+
+# closeness centrality
+V(g.olympics.football.2010)$closeness <- closeness(g.olympics.football.2010)
+
+# betweenness centrality
+V(g.olympics.football.2010)$betweenness <- betweenness(g.olympics.football.2010)
+
+# eigenvector centrality
+V(g.olympics.football.2010)$evcent <- evcent(g.olympics.football.2010)$vector
 

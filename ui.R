@@ -233,7 +233,50 @@ shinyUI(dashboardPage(
               ))),
       
       tabItem(tabName = "nv"),
-      tabItem(tabName = "nds"),
+      tabItem(tabName = "nds",
+              h2("Network descriptives"),
+              
+              fluidRow( 
+                
+                column(3,
+                       wellPanel(
+                         pickerInput(
+                           inputId = "network",
+                           label = "Choose a network to display",
+                           choices = c("Bipartite network: Events and Athletes",
+                                       "Bipartite network: Events and Athletes, Football"),
+                           width = "100%",
+                           options = list(`actions-box` = TRUE),
+                           multiple = F,
+                           selected = "Bipartite network: Events and Athletes"))
+                ),
+                
+                column(3,
+                       wellPanel(
+                         pickerInput(
+                           inputId = "centrality",
+                           label = "Centralities of the network",
+                           choices = c("Degree centrality",
+                                       "Closeness centrality",
+                                       "Betweenness centrality",
+                                       "Eigenvector centrality"),
+                           width = "100%",
+                           options = list(`actions-box` = TRUE),
+                           multiple = F,
+                           selected = "Degree centrality"))
+                ),
+                
+                
+                h2("Network descriptives"),
+                tableOutput("descriptives"),
+                h2("Summary of the centralities"),
+                tableOutput("centralities"),
+                h2("degree distribution"),
+                plotOutput("distribution")
+              )
+              
+              
+      ),
       
       tabItem(tabName = "nv1",
               h2("Network Analysis on Regions"),

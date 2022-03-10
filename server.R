@@ -80,5 +80,189 @@ shinyServer(function(input, output, body){
     dt.olympics
   })
   
+  output$centralities <- renderTable({
+    
+    if (input$network == "Bipartite network: Events and Athletes"){
+      
+      if (input$centrality == "Degree centrality") {
+        dt.centrality.statistics <- data.frame(statistic = c('Minimum',
+                                                             'Maximum',
+                                                             'Median',
+                                                             'Mean',
+                                                             'Standard deviation'),
+                                               Value = c( min(V(g.olympics)$degree),
+                                                          max(V(g.olympics)$degree),
+                                                          median(V(g.olympics)$degree),
+                                                          mean(V(g.olympics)$degree),
+                                                          sd(V(g.olympics)$degree)))
+        
+      }
+      
+      if (input$centrality == "Closeness centrality") {
+        dt.centrality.statistics <- data.frame(statistic = c('Minimum',
+                                                             'Maximum',
+                                                             'Median',
+                                                             'Mean',
+                                                             'Standard deviation'),
+                                               Value = c( min(V(g.olympics)$closeness),
+                                                          max(V(g.olympics)$closeness),
+                                                          median(V(g.olympics)$closeness),
+                                                          mean(V(g.olympics)$closeness),
+                                                          sd(V(g.olympics)$closeness)))
+        
+      }
+      
+      if (input$centrality == "Betweenness centrality") {
+        dt.centrality.statistics <- data.frame(statistic = c('Minimum',
+                                                             'Maximum',
+                                                             'Median',
+                                                             'Mean',
+                                                             'Standard deviation'),
+                                               Value = c( min(V(g.olympics)$betweenness),
+                                                          max(V(g.olympics)$betweenness),
+                                                          median(V(g.olympics)$betweenness),
+                                                          mean(V(g.olympics)$betweenness),
+                                                          sd(V(g.olympics)$betweenness)))
+        
+      }
+      
+      if (input$centrality == "Eigenvector centrality") {
+        dt.centrality.statistics <- data.frame(statistic = c('Minimum',
+                                                             'Maximum',
+                                                             'Median',
+                                                             'Mean',
+                                                             'Standard deviation'),
+                                               Value = c( min(V(g.olympics)$evcent),
+                                                          max(V(g.olympics)$evcent),
+                                                          median(V(g.olympics)$evcent),
+                                                          mean(V(g.olympics)$evcent),
+                                                          sd(V(g.olympics)$evcent)))
+        
+      }}
+    
+    else if(input$network == "Bipartite network: Events and Athletes, Football") {
+      
+      if (input$centrality == "Degree centrality") {
+        dt.centrality.statistics <- data.frame(statistic = c('Minimum',
+                                                             'Maximum',
+                                                             'Median',
+                                                             'Mean',
+                                                             'Standard deviation'),
+                                               Value = c( min(V(g.olympics.football.2010)$degree),
+                                                          max(V(g.olympics.football.2010)$degree),
+                                                          median(V(g.olympics.football.2010)$degree),
+                                                          mean(V(g.olympics)$degree),
+                                                          sd(V(g.olympics.football.2010)$degree)))
+        
+      }
+      
+      if (input$centrality == "Closeness centrality") {
+        dt.centrality.statistics <- data.frame(statistic = c('Minimum',
+                                                             'Maximum',
+                                                             'Median',
+                                                             'Mean',
+                                                             'Standard deviation'),
+                                               Value = c( min(V(g.olympics.football.2010)$closeness),
+                                                          max(V(g.olympics.football.2010)$closeness),
+                                                          median(V(g.olympics.football.2010)$closeness),
+                                                          mean(V(g.olympics.football.2010)$closeness),
+                                                          sd(V(g.olympics.football.2010)$closeness)))
+        
+      }
+      
+      if (input$centrality == "Betweenness centrality"){
+        dt.centrality.statistics <- data.frame(statistic = c('Minimum',
+                                                             'Maximum',
+                                                             'Median',
+                                                             'Mean',
+                                                             'Standard deviation'),
+                                               Value = c( min(V(g.olympics.football.2010)$betweenness),
+                                                          max(V(g.olympics.football.2010)$betweenness),
+                                                          median(V(g.olympics.football.2010)$betweenness),
+                                                          mean(V(g.olympics.football.2010)$betweenness),
+                                                          sd(V(g.olympics.football.2010)$betweenness)))
+        
+      }
+      
+      if (input$centrality == "Eigenvector centrality"){
+        dt.centrality.statistics <- data.frame(statistic = c('Minimum',
+                                                             'Maximum',
+                                                             'Median',
+                                                             'Mean',
+                                                             'Standard deviation'),
+                                               Value = c( min(V(g.olympics.football.2010)$evcent),
+                                                          max(V(g.olympics.football.2010)$evcent),
+                                                          median(V(g.olympics.football.2010)$evcent),
+                                                          mean(V(g.olympics.football.2010)$evcent),
+                                                          sd(V(g.olympics.football.2010)$evcent)))
+        
+      }
+      
+    }
+    
+    dt.centrality.statistics
+    
+    
+    
+    
+  })
+  
+  output$descriptives <- renderTable({ 
+    
+    if (input$network == "Bipartite network: Events and Athletes") {
+      
+      dt.descriptives.network <- data.frame(statistic = c('Number of Nodes',
+                                                          'Number of Edges',
+                                                          'Average degree',
+                                                          'Clustering coefficient',
+                                                          'Average path length',
+                                                          'Diameter'),
+                                            Value = c( gorder(g.olympics),
+                                                       gsize(g.olympics),
+                                                       mean(V(g.olympics)$degree),
+                                                       transitivity(g.olympics, type = "average"),
+                                                       mean(diameter(g.olympics)),
+                                                       diameter(g.olympics)))
+      
+    }
+    
+    if (input$network == "Bipartite network: Events and Athletes, Football") {
+      
+      dt.descriptives.network <- data.frame(statistic = c('Number of Nodes',
+                                                          'Number of Edges',
+                                                          'Average degree',
+                                                          'Clustering coefficient',
+                                                          'Average path length',
+                                                          'Diameter'),
+                                            Value = c( gorder(g.olympics.football.2010),
+                                                       gsize(g.olympics.football.2010),
+                                                       mean(V(g.olympics.football.2010)$degree),
+                                                       transitivity(g.olympics.football.2010, type = "average"),
+                                                       mean(diameter(g.olympics.football.2010)),
+                                                       diameter(g.olympics.football.2010)))
+      
+    }
+    
+    dt.descriptives.network
+    
+    
+  })
+  
+  output$distribution <- renderPlot({ 
+    if (input$network == "Bipartite network: Events and Athletes"){
+      plot_distribution <- qplot(V(g.olympics)$degree)
+      
+    }
+    
+    if (input$network == "Bipartite network: Events and Athletes, Football"){
+      plot_distribution <- qplot(V(g.olympics.football.2010)$degree)
+      
+    }
+    
+    plot_distribution
+    
+    
+  })
+  
 }
 )
