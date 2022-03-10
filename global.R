@@ -48,7 +48,6 @@ dt.all.data <- dt.olympics
 # containing binary data for each medal sort
 medals <- to.dummy(dt.all.data $Medal, "medals")
 dt.country.medals <- cbind(dt.all.data , medals)
-dt.country.medals <- na.omit(dt.country.medals)
 
 # Next we calculate the total medals per country and rename
 # the column

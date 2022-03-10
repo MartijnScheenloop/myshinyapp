@@ -2,21 +2,52 @@
 
 shinyServer(function(input, output, body){
   
-  output$table <- DT::renderDataTable(DT::datatable({
-    data <- dt.olympics
-    
-    # year, gender and season filter
+  
+  # filters, reactive and passed to rendertexts and table
+  tbinput <- reactive({
+    data = dt.all.data
     if (input$sex != "All") {
       data <- data[data$Sex == input$sex,]
     }
-    
     if (input$season != "All") {
       data <- data[data$Season == input$season,]
     }
-    
     data <- data[data$Year >= min(input$years) & data$Year <= max(input$years),]
+    data
+  })
+  
+  # upper statistics of descriptive page
+  output$athletes <- renderText(paste({
+    n_distinct(tbinput()$ID)
+  }))
+  
+  output$regions <- renderText(paste({
+    n_distinct(tbinput()$region)
+  }))
+  
+  output$games <- renderText(paste({
+    n_distinct(tbinput()$Games)
+  }))
+  
+  output$sports <- renderText(paste({
+    n_distinct(tbinput()$Sport)
+  }))
+  
+  output$hosting_cities <- renderText(paste({
+    n_distinct(tbinput()$City)
+  }))
+  
+  output$total_medals <- renderText(paste({
+    dt.med <- tbinput()
+    dt.med <- dt.med[!is.na(Medal)]
+    nrow(dt.med)
+  }))
+  
+  
+  # reactive data table, reloads when input changes (therefore not in global)
+  output$table <- DT::renderDataTable(DT::datatable({
+    data <- tbinput()
     
-    # presentation of data set, following steps:
     # 1. convert medal column to 3 binary columns per medal sort
     medals <- to.dummy(data $Medal, "medals")
     data <-cbind(data , medals)
@@ -55,8 +86,8 @@ shinyServer(function(input, output, body){
   
   # World Map is created from here #
   dt.country.medals$Total_medals =
-      paste(dt.country.medals$Country[1:133],
-            dt.country.medals$Total_medals[1:133], sep = " - ")
+      paste(dt.country.medals$Country[1:209],
+            dt.country.medals$Total_medals[1:209], sep = " - ")
   
   output$wm <- renderGvis ( {
     gvisGeoChart(

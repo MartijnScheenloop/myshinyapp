@@ -77,13 +77,14 @@ shinyUI(dashboardPage(
               br(),
               
               fluidRow(
-
-                column(width = 3, 
+                column(width = 3,
+                       align = "center",
                        wellPanel(
                          h4("Rows"),
                          h3("271.116")),
                 ),
-                column(width = 3, 
+                column(width = 3,
+                       align = "center",
                        wellPanel(
                          h4("Columns"),
                          h3("15")),
@@ -176,37 +177,95 @@ shinyUI(dashboardPage(
               h2("Descriptive Statistics"),
               
               fluidRow(
-                column(4,
+                column(2, 
+                       h4("Athletes")
+                ),
+                column(2,
+                       h4("Regions")
+                ),
+                column(2,
+                       h4("Games")
+                ),
+                column(2, 
+                       h4("Sports")
+                ),
+                column(2, 
+                       h4("hosting cities")
+                ),
+                column(2, 
+                       h4("Total medals")
+                )
+              ),
+              
+              fluidRow(
+                column(2, 
+                       wellPanel (
+                         div(textOutput("athletes"),style = "font-size:125%"),
+                         align = "center"
+                       )
+                ),
+                column(2,
+                       wellPanel (
+                         div(textOutput("regions"),style = "font-size:125%"),
+                         align = "center"
+                       )
+                ),
+                column(2,
+                       wellPanel (
+                         div(textOutput("games"),style = "font-size:125%"),
+                         align = "center"
+                       )
+                ), 
+                column(2,
+                       wellPanel (
+                         div(textOutput("sports"),style = "font-size:125%"),
+                         align = "center"
+                       )
+                ),     
+                column(2, 
                        wellPanel(
-                         sliderInput(
-                           inputId = "years",
-                           label = "Years",
-                           value = c(min(dt.olympics$Year, na.rm = TRUE), max(dt.olympics$Year, na.rm = TRUE)),
-                           min = min(dt.olympics$Year, na.rm = TRUE),
-                           max = max(dt.olympics$Year, na.rm = TRUE),
-                           step = 1,
-                           sep = ""))
+                         div(textOutput("hosting_cities"),style = "font-size:125%"),
+                         align = "center"
+                       )
+                ),
+                column(2, 
+                       wellPanel(
+                         div(textOutput("total_medals"),style = "font-size:125%"),
+                         align = "center"
+                       )
+                )
+              ),
+              
+              fluidRow(
+                column(6,
+                       sliderInput(
+                         inputId = "years",
+                         label = "Years",
+                         value = c(min(dt.olympics$Year, na.rm = TRUE), max(dt.olympics$Year, na.rm = TRUE)),
+                         min = min(dt.olympics$Year, na.rm = TRUE),
+                         max = max(dt.olympics$Year, na.rm = TRUE),
+                         step = 1,
+                         width = "100%",
+                         sep = "")
                 ),
                 column(3,
-                       wellPanel(
-                         pickerInput(
-                           inputId = "sex",
-                           label = "Select a gender",
-                           choices = c("All",sort(unique(dt.olympics[!is.na(Sex)]$Sex))),
-                           width = "100%",
-                           options = list(`actions-box` = TRUE),
-                           multiple = T,
-                           selected = "All"))
+                       pickerInput(
+                         inputId = "sex",
+                         label = "Select a gender",
+                         choices = c("All",sort(unique(dt.olympics[!is.na(Sex)]$Sex))),
+                         width = "100%",
+                         options = list(`actions-box` = TRUE),
+                         multiple = F,
+                         selected = "All")
                 ),
                 column(3,
-                       wellPanel(
-                         pickerInput(inputId = "season",
-                                     label = "Select a season",
-                                     choices = c("All",sort(unique(dt.olympics[!is.na(Season)]$Season))),
-                                     width = "100%",
-                                     options = list(`actions-box` = TRUE),
-                                     multiple = T,
-                                     selected = "All"))
+                       pickerInput(inputId = "season",
+                                   label = "Select a season",
+                                   choices = c("All",sort(unique(dt.olympics[!is.na(Season)]$Season))),
+                                   width = "100%",
+                                   options = list(`actions-box` = TRUE),
+                                   multiple = F,
+                                   selected = "All")
                 ),
                 DT::dataTableOutput("table"),
                 column(width = 9,
@@ -220,7 +279,7 @@ shinyUI(dashboardPage(
                          does not belong to the top of the table. It must be mentioned that China has considerably less total participations
                          than the USA and China but when looking at China's average amount of medals per game the country does not even
                          come close to the USA and China.")
-                       ),
+                ),
               )
       ),
       
