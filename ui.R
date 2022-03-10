@@ -8,8 +8,7 @@ shinyUI(dashboardPage(
   skin = "green",
   dashboardHeader(title = "Olympics Network Analytics"),
   dashboardSidebar(
-    sidebarUserPanel(img(src = "olympicrings.png",
-                         style = "display: block; margin-left: auto; margin-right: auto;")),
+    sidebarUserPanel("NDA group 1"),
     
     sidebarMenu(
       id = "tabs",
