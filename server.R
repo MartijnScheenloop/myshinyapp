@@ -53,6 +53,7 @@ shinyServer(function(input, output, body){
     
   }))
   
+  # World Map is created from here #
   dt.country.medals$Total_medals =
       paste(dt.country.medals$Country[1:133],
             dt.country.medals$Total_medals[1:133], sep = " - ")

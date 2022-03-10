@@ -1,4 +1,4 @@
-## global.Rr ##
+## global.R ##
 
 library(shinydashboard)
 library(shiny)

@@ -3,7 +3,7 @@
 library(shinydashboard)
 library(shiny)
 
-# Create the dashboard
+# Create the dashboard including tabs #
 shinyUI(dashboardPage(
   skin = "green",
   dashboardHeader(title = "Olympics Network Analytics"),
@@ -50,13 +50,7 @@ shinyUI(dashboardPage(
   
   dashboardBody(
     tabItems(
-      tabItem(tabName = "wm",
-              fluidRow(box(
-                p("This tab displays the world map. When you hover over a country the total
-                  amount of medals won by that country will be displayed."),
-                htmlOutput("wm"), width = "100%"
-              ))),
-      ## Homepage with welcome message and general information
+      ## Homepage with welcome message and general information ##
       tabItem(tabName = "hp",
               h1("Welcome to our shiny application!"),
               img(src = "hpimage-modified.png", height = 500, width = "100%", inline = FALSE),
@@ -229,6 +223,14 @@ shinyUI(dashboardPage(
                        ),
               )
       ),
+      
+      # Worldmap is created here #
+      tabItem(tabName = "wm",
+              fluidRow(box(
+                p("This tab displays the world map. When you hover over a country the total
+                  amount of medals won by that country will be displayed."),
+                htmlOutput("wm"), width = "100%"
+              ))),
       
       tabItem(tabName = "nv"),
       tabItem(tabName = "nds"),
