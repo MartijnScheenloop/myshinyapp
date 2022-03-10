@@ -78,13 +78,11 @@ shinyUI(dashboardPage(
               
               fluidRow(
                 column(width = 3,
-                       align = "center",
                        wellPanel(
                          h4("Rows"),
                          h3("271.116")),
                 ),
                 column(width = 3,
-                       align = "center",
                        wellPanel(
                          h4("Columns"),
                          h3("15")),
