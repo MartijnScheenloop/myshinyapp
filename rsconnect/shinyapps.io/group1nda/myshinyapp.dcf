@@ -1,0 +1,13 @@
+name: myshinyapp
+title: myshinyapp
+username:
+account: group1nda
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5824618
+bundleId: 5666909
+url: https://group1nda.shinyapps.io/myshinyapp/
+when: 1646926890.49774
+lastSyncTime: 1646926890.49776
+asMultiple: FALSE
+asStatic: FALSE
