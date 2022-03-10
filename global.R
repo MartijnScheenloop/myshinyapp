@@ -41,10 +41,11 @@ dt.olympics <- dt.olympics[!is.na(Event)]
 # Create new data table to modify for the world map
 dt.all.data <- dt.olympics
 
-# We first trasnform the medal column into 3 columns
+# We first transform the medal column into 3 columns
 # containing binary data for each medal sort
 medals <- to.dummy(dt.all.data $Medal, "medals")
-dt.country.medals <-cbind(dt.all.data , medals)
+dt.country.medals <- cbind(dt.all.data , medals)
+dt.country.medals <- na.omit(dt.country.medals)
 
 # Next we calculate the total medals per country and rename
 # the column
@@ -73,6 +74,4 @@ dt.country.medals$Total_medals = rowSums(dt.country.medals
 colnames(dt.country.medals)[1] = "Country"
 dt.country.medals$Country = as.character(dt.country.medals$Country)
 dt.country.medals$Country
-
-
 

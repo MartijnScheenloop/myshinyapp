@@ -53,7 +53,7 @@ shinyServer(function(input, output, body){
     
   }))
   
-  dt.country.medals.final$country_medals_string =
+  dt.country.medals$Total_medals =
       paste(dt.country.medals$Country[1:133],
             dt.country.medals$Total_medals[1:133], sep = " - ")
   
