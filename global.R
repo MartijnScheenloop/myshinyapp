@@ -135,4 +135,3 @@ V(g.olympics.football.2010)$betweenness <- betweenness(g.olympics.football.2010)
 
 # eigenvector centrality
 V(g.olympics.football.2010)$evcent <- evcent(g.olympics.football.2010)$vector
-

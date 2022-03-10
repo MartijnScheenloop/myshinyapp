@@ -243,12 +243,12 @@ shinyUI(dashboardPage(
                          pickerInput(
                            inputId = "network",
                            label = "Choose a network to display",
-                           choices = c("Bipartite network: Events and Athletes",
+                           choices = c("Bipartite network: Events and Athletes, boxing",
                                        "Bipartite network: Events and Athletes, Football"),
                            width = "100%",
                            options = list(`actions-box` = TRUE),
                            multiple = F,
-                           selected = "Bipartite network: Events and Athletes"))
+                           selected = "Bipartite network: Events and Athletes, boxing"))
                 ),
                 
                 column(3,

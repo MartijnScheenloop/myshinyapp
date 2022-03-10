@@ -82,7 +82,7 @@ shinyServer(function(input, output, body){
   
   output$centralities <- renderTable({
     
-    if (input$network == "Bipartite network: Events and Athletes"){
+    if (input$network == "Bipartite network: Events and Athletes, boxing"){
       
       if (input$centrality == "Degree centrality") {
         dt.centrality.statistics <- data.frame(statistic = c('Minimum',
@@ -209,7 +209,7 @@ shinyServer(function(input, output, body){
   
   output$descriptives <- renderTable({ 
     
-    if (input$network == "Bipartite network: Events and Athletes") {
+    if (input$network == "Bipartite network: Events and Athletes, boxing") {
       
       dt.descriptives.network <- data.frame(statistic = c('Number of Nodes',
                                                           'Number of Edges',
@@ -249,7 +249,7 @@ shinyServer(function(input, output, body){
   })
   
   output$distribution <- renderPlot({ 
-    if (input$network == "Bipartite network: Events and Athletes"){
+    if (input$network == "Bipartite network: Events and Athletes, boxing"){
       plot_distribution <- qplot(V(g.olympics)$degree)
       
     }
