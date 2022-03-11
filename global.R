@@ -1,5 +1,6 @@
 ## global.R ##
 
+library(visNetwork)
 library(DT)
 library(igraph)
 library(shinydashboard)
@@ -78,7 +79,7 @@ dt.country.medals$Country
 
 
 
-### NETWORK EXPLORATION 1: GAMES AND ATHLETES AFTER 2010 FOR BOXING ###
+# Network 1: Games and athletes after 2010 for boxing
 # Creating the right data frame
 dt.graph.games.final <- dt.olympics[Sport == "Boxing",]
 dt.graph.games <- dt.graph.games.final[Year >= 2010,]
@@ -106,10 +107,11 @@ V(g.olympics)$evcent <- evcent(g.olympics)$vector
 
 
 
-### NETWORK EXPLORATION 2: GAMES AND ATHLETES AFTER 2010 FOR FOOTBALL ###
+# Network 2: Games and athletes football after 2010
+
 # Creating the right data frame
 dt.graph.football <- dt.olympics[Sport == "Football",]
-dt.graph.football.2010 <- dt.graph.football[Year >= 2010]
+dt.graph.football.2010 <-dt.graph.football[Year >= 2010]
 
 # Building the graph
 dt.all.athletes.football.2010 <- dt.graph.football.2010[, list(name = unique(Name),
@@ -122,13 +124,28 @@ g.olympics.football.2010 <- graph.data.frame(dt.graph.football.2010[, list(Games
                                              directed = F,
                                              vertices = dt.vertices.football.2010)
 
-# Calculating centrality measures
+# Centralities of the network
+# Degree centrality
 V(g.olympics.football.2010)$degree <- degree(g.olympics.football.2010)
+
+# closeness centrality
 V(g.olympics.football.2010)$closeness <- closeness(g.olympics.football.2010)
+
+# betweenness centrality
 V(g.olympics.football.2010)$betweenness <- betweenness(g.olympics.football.2010)
+
+# eigenvector centrality
 V(g.olympics.football.2010)$evcent <- evcent(g.olympics.football.2010)$vector
 
+# Show only the athletes that participated in both olympics: boxing
+g.olympics.subgraph <- induced.subgraph(g.olympics, V(g.olympics)[degree > 1])
 
+# Show only the athletes that participated in both olympics: Football
+g.olympics.football.2010.subgraph <- induced.subgraph(g.olympics.football.2010, V(g.olympics.football.2010)[degree > 1])
+
+# Tables descriptive athletes
+dt.desciptives.table.boxing <- data.table(get.data.frame(g.olympics, "vertices"))
+dt.desciptives.table.football <- data.table(get.data.frame(g.olympics.football.2010, "vertices"))
 
 ### NETWORK ANALYSIS 1: REGION-EVENTS NETWORK ###
 ## Creating a network with regions and common events between regions as edges ##

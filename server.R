@@ -226,6 +226,9 @@ shinyServer(function(input, output, body){
     
     dt.centrality.statistics
     
+    
+    
+    
   })
   
   output$descriptives <- renderTable({ 
@@ -271,19 +274,86 @@ shinyServer(function(input, output, body){
   
   output$distribution <- renderPlot({ 
     if (input$network == "Bipartite network: Events and Athletes, boxing"){
-      plot_distribution <- qplot(V(g.olympics)$degree,
-                                 xlab = "Degree", ylab = "Count")
+      plot_distribution <- qplot(V(g.olympics)$degree)
       
     }
     
     if (input$network == "Bipartite network: Events and Athletes, Football"){
-      plot_distribution <- qplot(V(g.olympics.football.2010)$degree,
-                                 xlab = "Degree", ylab = "Count")
+      plot_distribution <- qplot(V(g.olympics.football.2010)$degree)
+      
     }
     
     plot_distribution
     
+    
   })
+  
+  output$mynetwork <- renderVisNetwork({
+    if (input$network_choice == "Bipartite network: Events and Athletes, boxing visualization"){
+      g.output <- visIgraph(g.olympics)
+      
+    }
+    
+    if (input$network_choice == "Bipartite network: Events and Athletes, Football visualization"){
+      g.output <- visIgraph(g.olympics.football.2010)
+      
+    }
+    
+    if (input$network_choice == "Boxers that participated in both olympic events"){
+      g.output <- visIgraph(g.olympics.subgraph)
+      
+    }
+    
+    if (input$network_choice == "Football players that participated in both olympic events"){
+      g.output <- visIgraph(g.olympics.football.2010.subgraph)
+    }
+    
+    
+    g.output
+    
+  })
+  
+  output$descriptives_table <- DT::renderDataTable(DT::datatable({
+    if (input$network == "Bipartite network: Events and Athletes, boxing"){
+      dt.descriptive.table <- data.table(get.data.frame(g.olympics, "vertices"))
+      
+    }
+    
+    if (input$network == "Bipartite network: Events and Athletes, Football"){
+      dt.descriptive.table <- data.table(get.data.frame(g.olympics.football.2010, "vertices"))
+      
+    }
+    
+    dt.descriptive.table
+    
+  }))
+  
+  output$athletes1 <- DT::renderDataTable(DT::datatable({
+    if (input$network_choice == "Boxers that participated in both olympic events"){
+      dt.subgraph <- data.table(get.data.frame(g.olympics.subgraph, "vertices"))
+      dt.subgraph[, type := NULL][, degree := NULL][, closeness := NULL][, betweenness := NULL][, evcent := NULL]
+      
+    }
+    
+    if (input$network_choice == "Football players that participated in both olympic events"){
+      dt.subgraph <- data.table(get.data.frame(g.olympics.football.2010.subgraph, "vertices"))
+      dt.subgraph[, type := NULL][, degree := NULL][, closeness := NULL][, betweenness := NULL][, evcent := NULL]
+      
+    }
+    
+    if (input$network_choice == "Bipartite network: Events and Athletes, boxing visualization"){
+      dt.subgraph <- NULL
+      
+    }
+    
+    if (input$network_choice == "Bipartite network: Events and Athletes, Football visualization"){
+      dt.subgraph <- data.table(get.data.frame(g.olympics.football.2010.subgraph, "vertices"))
+      dt.subgraph <- NULL
+    }
+    
+    dt.subgraph
+    
+  }))
   
   output$regions.events.graph.table <- renderDataTable( {
 

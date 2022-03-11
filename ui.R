@@ -302,66 +302,88 @@ shinyUI(dashboardPage(
               ))),
       
       tabItem(tabName = "nv",
-              h1("Network Visualization"),
-              ),
-      
-      tabItem(tabName = "nds",
-              h1("Network Descriptive Statistics"),
+              titlePanel("Network visualization"),
               
-              p("On this page, two networks have been created that contain sporting events and the 
-                athletes that compete in these. The filters below alow the user to select which network
-                they wish to see: sporting events and the athletes for the sport of Boxing or Football."),
-              
-              fluidRow( 
+              sidebarLayout(
                 
-                column(3,
-                       wellPanel(
-                         pickerInput(
-                           inputId = "network",
-                           label = "Choose a network to display",
-                           choices = c("Bipartite network: Events and Athletes, boxing",
-                                       "Bipartite network: Events and Athletes, Football"),
-                           width = "100%",
-                           options = list(`actions-box` = TRUE),
-                           multiple = F,
-                           selected = "Bipartite network: Events and Athletes, boxing"))
-                ),
+                sidebarPanel(
+                  pickerInput(
+                    inputId = "network_choice",
+                    label = "Choose a network to visualize",
+                    choices = c("Bipartite network: Events and Athletes, boxing visualization",
+                                "Bipartite network: Events and Athletes, Football visualization",
+                                "Boxers that participated in both olympic events",
+                                "Football players that participated in both olympic events"),
+                    width = "100%",
+                    options = list(`actions-box` = TRUE),
+                    multiple = F,
+                    selected = "Bipartite network: Events and Athletes, boxing visualization")),
                 
-                column(3,
-                       wellPanel(
-                         pickerInput(
-                           inputId = "centrality",
-                           label = "Centralities of the network",
-                           choices = c("Degree centrality",
-                                       "Closeness centrality",
-                                       "Betweenness centrality",
-                                       "Eigenvector centrality"),
-                           width = "100%",
-                           options = list(`actions-box` = TRUE),
-                           multiple = F,
-                           selected = "Degree centrality"))
-                ),
+                mainPanel(
+                  h2("Visualization of the network"),  
+                  visNetworkOutput("mynetwork"),
+                  DT::dataTableOutput("athletes1")
+                )
                 
-                HTML(strrep(br(), 7)),
                 
-                column(4,
-                       h2("Network Descriptives"),
-                       tableOutput("descriptives")
-                ),
-                
-                column(4,
-                       h2("Centralities Summary"),
-                       tableOutput("centralities")
-                ),
-                
-                HTML(strrep(br(), 15)),
-
-                h2("Degree Distribution"),
-                plotOutput("distribution")
               )
               
-              
       ),
+      
+      
+      tabItem(tabName = "nds",
+              titlePanel("Network descriptives"),
+              p("This page displays the descriptives of the olympic network.
+                The olympic network was to big to create (shiny could not
+                cope with it), so we decided to use the data of two events:
+                Boxing and Football from 2010 and onwards.THe user is able to 
+                view the basis descriptions of each network, the centrality
+                measures of each network, an histogram with the degree distributions
+                plotted, and a table that contains all of the centrality measures
+                for each athlete in the data set"),
+              
+              sidebarLayout(
+                
+                sidebarPanel(
+                  pickerInput(
+                    inputId = "network",
+                    label = "Choose a network to display",
+                    choices = c("Bipartite network: Events and Athletes, boxing",
+                                "Bipartite network: Events and Athletes, Football"),
+                    width = "100%",
+                    options = list(`actions-box` = TRUE),
+                    multiple = F,
+                    selected = "Bipartite network: Events and Athletes, boxing"),
+                  
+                  pickerInput(
+                    inputId = "centrality",
+                    label = "Centralities of the network",
+                    choices = c("Degree centrality",
+                                "Closeness centrality",
+                                "Betweenness centrality",
+                                "Eigenvector centrality"),
+                    width = "100%",
+                    options = list(`actions-box` = TRUE),
+                    multiple = F,
+                    selected = "Degree centrality")),
+                
+                mainPanel(
+                  column(4,
+                         h2("Descriptive statistics"),
+                         tableOutput("descriptives")),
+                  h2("Centrality statistics"),
+                  tableOutput("centralities"),
+                  br(),
+                  h2("Degree distribution"),
+                  plotOutput("distribution"),
+                  br(),
+                  h2("Centrality statistics for each node"),
+                  DT::dataTableOutput("descriptives_table")
+                )
+                
+                
+                
+              )),
       
       tabItem(tabName = "na1",
               h1("Regions-Events Centrality Analysis"),
