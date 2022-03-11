@@ -37,21 +37,6 @@ dt.olympics[NOC == "UK"]$region = "United Kingdom"
 # Remove rows with NA as Event, are useless
 dt.olympics <- dt.olympics[!is.na(Event)]
 
-# Obtaining number of athletes, medals, unique events and sports per region 
-dt.region.numbers <- dt.olympics[, .(n_athletes = length(unique(ID))), by = region]
-dt.region.numbers <- merge(dt.region.numbers,
-                           dt.olympics[, .(n_medals = sum(!is.na(Medal))), by = region],
-                           by = "region")
-dt.region.numbers <- merge(dt.region.numbers,
-                           dt.olympics[, .(n_unique_events = length(unique(Event))), by = region],
-                           by = "region")
-dt.region.numbers <- merge(dt.region.numbers,
-                           dt.olympics[, .(n_unique_sports = length(unique(Sport))), by = region],
-                           by = "region")
-dt.region.numbers <- merge(dt.region.numbers,
-                           dt.olympics[, .(n_games = length(unique(Games))), by = region],
-                           by = "region")
-
 
 
 ### HERE THE DATA FOR THE WORLDMAP IS MADE ###
@@ -168,6 +153,18 @@ V(g.regions.events)$evcent      <- evcent(g.regions.events)$vector
 
 # Creating a data.table with centrality measures
 dt.regions.events.centr <- data.table(get.data.frame(g.regions.events, what = "vertices"))
+
+# Creating data.table that can be filtered
+dt.olympics.filtered <- filter(dt.olympics)#, Games == input$games, Sport == input$sport)
+
+# Obtaining number of athletes, medals, unique events and sports per region
+dt.region.numbers <- 
+  dt.olympics.filtered[, .(n_athletes = length(unique(ID)),
+                           n_medals = sum(!is.na(Medal)),
+                           n_unique_events = length(unique(Event)),
+                           n_unique_sports = length(unique(Sport)),
+                           n_games = length(unique(Games))), 
+                       by = region][order(region)]
 
 # Merging the numbers per region with the centrality data.table
 dt.regions.events.centr <- merge(dt.regions.events.centr, dt.region.numbers,

@@ -279,46 +279,34 @@ shinyServer(function(input, output, body){
     
     plot_distribution
     
-    
   })
   
   output$regions.events.graph.table <- renderDataTable( {
 
     if (input$centrality.na1 == "Degree") {
-      
       dt.regions.events.centr[, list(name, degree, n_unique_events, n_athletes, 
                                      n_unique_sports, n_games, n_medals)]
-      
     }
     
     else if (input$centrality.na1 == "Closeness") {
-      
       dt.regions.events.centr[, list(name, closeness, n_unique_events, n_athletes, 
                                      n_unique_sports, n_games, n_medals)]
-      
     }
     
     else if (input$centrality.na1 == "Betweenness") {
-      
       dt.regions.events.centr[, list(name, betweenness, n_unique_events, n_athletes, 
                                      n_unique_sports, n_games, n_medals)]
-      
     }
     
     else if (input$centrality.na1 == "Eigenvector") {
-      
       dt.regions.events.centr[, list(name, evcent, n_unique_events, n_athletes, 
                                      n_unique_sports, n_games, n_medals)]
-      
     }
-    
   })
   
   output$regions.events.graph.plot <- renderPlot( {
     if (input$games != "All") {
-      
     plot(g.regions.events, vertex.size = 3, label.cex = 0.2)
-      
     }
   })
   
