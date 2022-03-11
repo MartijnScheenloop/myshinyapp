@@ -188,7 +188,7 @@ shinyUI(dashboardPage(
                        h4("Sports")
                 ),
                 column(2, 
-                       h4("hosting cities")
+                       h4("Hosting cities")
                 ),
                 column(2, 
                        h4("Total medals")
