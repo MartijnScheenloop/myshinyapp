@@ -361,7 +361,7 @@ shinyUI(dashboardPage(
                 connected to each other when they have participated in the same sporting event."),
               
               fluidRow(
-                column(2,
+                column(3,
                        wellPanel(
                          pickerInput(inputId = "event",
                                      label = "Select an event",
@@ -372,7 +372,36 @@ shinyUI(dashboardPage(
                                      selected = "All")
                          )
                        ),
+                
+                column(3,
+                       wellPanel(
+                         pickerInput(inputId = "sport",
+                                     label = "Select a sport",
+                                     choices = c("All",sort(unique(dt.olympics[!is.na(Sport)]$Sport))),
+                                     width = "100%",
+                                     options = list(`actions-box` = TRUE),
+                                     multiple = T,
+                                     selected = "All")
+                       )
+                ),
+                
+                column(3,
+                       wellPanel(
+                         pickerInput(inputId = "games",
+                                     label = "Select the Games",
+                                     choices = c("All",sort(unique(dt.olympics[!is.na(Games)]$Games))),
+                                     width = "100%",
+                                     options = list(`actions-box` = TRUE),
+                                     multiple = T,
+                                     selected = "All")
+                       )
+                ),
+                
+                HTML(strrep(br(), 6)),
+                
+                h2("Region Centralities"),
                 dataTableOutput("graph.table")
+                
                 )
       ),
 
