@@ -285,7 +285,53 @@ shinyServer(function(input, output, body){
   
   output$regions.events.graph.table <- renderDataTable( {
 
-    dt.regions.events.centr
+    if (input$centrality.na1 == "Degree") {
+      
+      dt.regions.sports.centr[, list(name, 
+                                     degree, 
+                                     n_unique_events, 
+                                     n_athletes,
+                                     n_unique_sports,
+                                     n_games,
+                                     n_medals)]
+      
+    }
+    
+    else if (input$centrality.na1 == "Closeness") {
+      
+      dt.regions.sports.centr[, list(name,
+                                     closeness,
+                                     n_unique_events,
+                                     n_athletes,
+                                     n_unique_sports,
+                                     n_games,
+                                     n_medals)]
+      
+    }
+    
+    else if (input$centrality.na1 == "Betweenness") {
+      
+      dt.regions.sports.centr[, list(name,
+                                     betweenness,
+                                     n_unique_events,
+                                     n_athletes,
+                                     n_unique_sports,
+                                     n_games,
+                                     n_medals)]
+      
+    }
+    
+    else if (input$centrality.na1 == "Eigenvector") {
+      
+      dt.regions.sports.centr[, list(name,
+                                     evcent,
+                                     n_unique_events,
+                                     n_athletes,
+                                     n_unique_sports,
+                                     n_games,
+                                     n_medals)]
+      
+    }
     
   })
   
@@ -297,7 +343,53 @@ shinyServer(function(input, output, body){
   
   output$regions.sports.graph.table <- renderDataTable( {
     
-    dt.regions.sports.centr
+    if (input$centrality.na2 == "Degree") {
+      
+      dt.regions.sports.centr[, list(name, 
+                                     degree, 
+                                     n_unique_events, 
+                                     n_athletes,
+                                     n_unique_sports,
+                                     n_games,
+                                     n_medals)]
+      
+    }
+    
+    else if (input$centrality.na2 == "Closeness") {
+
+      dt.regions.sports.centr[, list(name,
+                                     closeness,
+                                     n_unique_events,
+                                     n_athletes,
+                                     n_unique_sports,
+                                     n_games,
+                                     n_medals)]
+
+    }
+
+    else if (input$centrality.na2 == "Betweenness") {
+
+      dt.regions.sports.centr[, list(name,
+                                     betweenness,
+                                     n_unique_events,
+                                     n_athletes,
+                                     n_unique_sports,
+                                     n_games,
+                                     n_medals)]
+
+    }
+
+    else if (input$centrality.na2 == "Eigenvector") {
+
+      dt.regions.sports.centr[, list(name,
+                                     evcent,
+                                     n_unique_events,
+                                     n_athletes,
+                                     n_unique_sports,
+                                     n_games,
+                                     n_medals)]
+
+    }
     
   })
   

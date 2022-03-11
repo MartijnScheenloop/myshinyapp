@@ -397,6 +397,21 @@ shinyUI(dashboardPage(
                        )
                 ),
                 
+                column(3,
+                       wellPanel(
+                         pickerInput(
+                           inputId = "centrality.na1",
+                           label = "Centrality measure",
+                           choices = c("Degree",
+                                       "Closeness",
+                                       "Betweenness",
+                                       "Eigenvector"),
+                           width = "100%",
+                           options = list(`actions-box` = TRUE),
+                           multiple = F,
+                           selected = "Degree"))
+                ),
+                
                 HTML(strrep(br(), 6)),
                 
                 h2("Region-Events Network Centralities"),
@@ -453,6 +468,21 @@ shinyUI(dashboardPage(
                                      multiple = T,
                                      selected = "All")
                        )
+                ),
+                
+                column(3,
+                       wellPanel(
+                         pickerInput(
+                           inputId = "centrality.na2",
+                           label = "Centrality measure",
+                           choices = c("Degree",
+                                       "Closeness",
+                                       "Betweenness",
+                                       "Eigenvector"),
+                           width = "100%",
+                           options = list(`actions-box` = TRUE),
+                           multiple = F,
+                           selected = "Degree"))
                 ),
                 
                 HTML(strrep(br(), 6)),
