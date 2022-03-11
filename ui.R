@@ -77,15 +77,17 @@ shinyUI(dashboardPage(
               br(),
               
               fluidRow(
-                column(width = 3,
+                column(width = 6,
                        wellPanel(
                          h4("Rows"),
                          h3("271.116")),
+                       align = "center"
                 ),
-                column(width = 3,
+                column(width = 6,
                        wellPanel(
                          h4("Columns"),
                          h3("15")),
+                       align = "center"
                 ),
               ),
               
@@ -246,20 +248,29 @@ shinyUI(dashboardPage(
                          width = "100%",
                          sep = "")
                 ),
-                column(3,
+                column(2,
                        pickerInput(
                          inputId = "sex",
-                         label = "Select a gender",
+                         label = "Gender",
                          choices = c("All",sort(unique(dt.olympics[!is.na(Sex)]$Sex))),
                          width = "100%",
                          options = list(`actions-box` = TRUE),
                          multiple = F,
                          selected = "All")
                 ),
-                column(3,
+                column(2,
                        pickerInput(inputId = "season",
-                                   label = "Select a season",
+                                   label = "Season",
                                    choices = c("All",sort(unique(dt.olympics[!is.na(Season)]$Season))),
+                                   width = "100%",
+                                   options = list(`actions-box` = TRUE),
+                                   multiple = F,
+                                   selected = "All")
+                ),
+                column(2,
+                       pickerInput(inputId = "games",
+                                   label = "Individual game",
+                                   choices = c("All",sort(unique(dt.olympics[!is.na(Games)]$Games))),
                                    width = "100%",
                                    options = list(`actions-box` = TRUE),
                                    multiple = F,
