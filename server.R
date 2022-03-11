@@ -290,9 +290,9 @@ shinyServer(function(input, output, body){
   })
   
   # output$regions.events.graph.plot <- renderPlot( {
-  #   
-  #   plot(g.regions.events)
-  #   
+  # 
+  #   plot(g.regions.events, vertex.size = 3, label.cex = 0.2)
+  # 
   # })
   
   output$regions.sports.graph.table <- renderDataTable( {
@@ -303,8 +303,8 @@ shinyServer(function(input, output, body){
   
   # output$regions.sports.graph.plot <- renderPlot( {
   #   
-  #   plot(g.regions.sports)
-  #   
+  #   plot(g.regions.sports, vertex.size = 3, label.cex = 0.2)
+  # 
   # })
   
 }
