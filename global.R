@@ -189,32 +189,3 @@ dt.regions.events.centr <- data.table(get.data.frame(g.regions.events, what = "v
 dt.regions.events.centr <- merge(dt.regions.events.centr, dt.region.numbers,
                                  by.x = 'name', by.y = 'region')
 
-
-
-### NETWORK ANALYSIS 2: REGION-SPORTS NETWORK ###
-## Creating a network with regions and common sports between regions as edges ##
-
-# Get all unique regions and sports and combine them
-dt.vertices.regions.sports <- rbind(dt.olympics[, list(name = unique(region), type = FALSE)],
-                                    dt.olympics[, list(name = unique(Sport), type = TRUE)])
-
-# Bipartite graph of Olympic regions and the sports they compete in
-g.regions.sports.bipartite <- graph_from_data_frame(dt.olympics[,list(region, Sport)],
-                                                    directed = FALSE,
-                                                    vertices = dt.vertices.regions.sports)
-
-# Projection into the region space
-g.regions.sports <- bipartite.projection(g.regions.sports.bipartite)$proj1
-
-# Calculating centrality measures
-V(g.regions.sports)$degree      <- degree(g.regions.sports)
-V(g.regions.sports)$closeness   <- closeness(g.regions.sports)
-V(g.regions.sports)$betweenness <- betweenness(g.regions.sports)
-V(g.regions.sports)$evcent      <- evcent(g.regions.sports)$vector
-
-# Creating a data.table with centrality measures
-dt.regions.sports.centr <- data.table(get.data.frame(g.regions.sports, what = "vertices"))
-
-# Merging the numbers per region with the centrality data.table
-dt.regions.sports.centr <- merge(dt.regions.sports.centr, dt.region.numbers,
-                                 by.x = 'name', by.y = 'region')

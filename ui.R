@@ -6,7 +6,7 @@ library(shiny)
 # Create the dashboard including tabs #
 shinyUI(dashboardPage(
   skin = "green",
-  dashboardHeader(title = "Olympics Network Analytics"),
+  dashboardHeader(title = "OlympicLinks"),
   dashboardSidebar(
     sidebarUserPanel("NDA group 1"),
     
@@ -37,8 +37,8 @@ shinyUI(dashboardPage(
         "Network Analysis",
         icon = icon("fa-solid fa-globe"),
         tabName = "na",
-        menuSubItem("Regions-Events Network", tabName = "na1"),
-        menuSubItem("Regions-Sports Network", tabName = "na2")
+        menuSubItem("Centrality Analysis", tabName = "na1"),
+        menuSubItem("Link Prediction", tabName = "na2")
         ),
       
       menuItem(
@@ -353,50 +353,23 @@ shinyUI(dashboardPage(
       ),
       
       tabItem(tabName = "na1",
-              h1("Regions-Events Network Analysis"),
+              h1("Regions-Events Centrality Analysis"),
               
-              p("This page shows a network analysis on the dataset of this app. The network aims to discover the relations
-                between the various regions in the dataset. Every region participates in several sports and events with
-                their athletes, which is what this network is about. This network shows the regions as nodes that are
-                connected to each other when they have participated in the same sporting event."),
+              p("This page shows the Regions-Events Network of the dataset This network aims to discover
+                the relations between the various regions in the dataset and the events they participate in.
+                Every region participates in several sports and events with their athletes, which is what 
+                this network is about. This network shows the regions as nodes that are connected to each 
+                other when they have participated in the same sporting event."),
+              
+              p("The table below allows you to investigate how countries are related to other countries in
+                terms of sporting events. It also shows interesting statistics per country, regarding their
+                participation in the Olympic Games. Countries with a degree of 208 are countries that are 
+                linked to all other countries, meaning that have at least one sporting event in common with 
+                every other country. What is remarkable to see here are high-degree countries with a low
+                number of unique events, such as American Samoa. This indicates that the events they participate
+                in must be quite popular events, since they are connected to many countries with few events."),
               
               fluidRow(
-                column(3,
-                       wellPanel(
-                         pickerInput(inputId = "event",
-                                     label = "Select an event",
-                                     choices = c("All",sort(unique(dt.olympics[!is.na(Event)]$Event))),
-                                     width = "100%",
-                                     options = list(`actions-box` = TRUE),
-                                     multiple = T,
-                                     selected = "All")
-                         )
-                       ),
-                
-                column(3,
-                       wellPanel(
-                         pickerInput(inputId = "sport",
-                                     label = "Select a sport",
-                                     choices = c("All",sort(unique(dt.olympics[!is.na(Sport)]$Sport))),
-                                     width = "100%",
-                                     options = list(`actions-box` = TRUE),
-                                     multiple = T,
-                                     selected = "All")
-                       )
-                ),
-                
-                column(3,
-                       wellPanel(
-                         pickerInput(inputId = "games",
-                                     label = "Select the Games",
-                                     choices = c("All",sort(unique(dt.olympics[!is.na(Games)]$Games))),
-                                     width = "100%",
-                                     options = list(`actions-box` = TRUE),
-                                     multiple = T,
-                                     selected = "All")
-                       )
-                ),
-                
                 column(3,
                        wellPanel(
                          pickerInput(
@@ -412,88 +385,54 @@ shinyUI(dashboardPage(
                            selected = "Degree"))
                 ),
                 
+                # column(3,
+                #        wellPanel(
+                #          pickerInput(inputId = "sport",
+                #                      label = "Select a sport",
+                #                      choices = c("All",sort(unique(dt.olympics[!is.na(Sport)]$Sport))),
+                #                      width = "100%",
+                #                      options = list(`actions-box` = TRUE),
+                #                      multiple = T,
+                #                      selected = "All")
+                #        )
+                # ),
+                # 
+                # column(3,
+                #        wellPanel(
+                #          pickerInput(inputId = "games",
+                #                      label = "Select the Games",
+                #                      choices = c("All",sort(unique(dt.olympics[!is.na(Games)]$Games))),
+                #                      width = "100%",
+                #                      options = list(`actions-box` = TRUE),
+                #                      multiple = T,
+                #                      selected = "All")
+                #        )
+                # ),
+                
                 HTML(strrep(br(), 6)),
                 
-                h2("Region-Events Network Centralities"),
+                h2("Network Centralities"),
                 dataTableOutput("regions.events.graph.table"),
                 
-                HTML(strrep(br(), 2)),
-                
-                h2("Region-Events Network plot"),
-                dataTableOutput("regions.events.graph.plot")
+                # HTML(strrep(br(), 2)),
+                # 
+                # h2("Region-Events Network plot"),
+                # dataTableOutput("regions.events.graph.plot")
                 
                 )
       ),
 
       tabItem(tabName = "na2",
-              h1("Regions-Sports Network Analysis"),
+              h1("Regions-Events Network Link Prediction"),
               
-              p("This page shows a network analysis on the dataset of this app. The network aims to discover the relations
-                between the various regions in the dataset. Every region participates in several sports and events with
-                their athletes, which is what this network is about. This network shows the regions as nodes that are
-                connected to each other when they have participated in the same sport."),
+              p("This page considers the network presented in the previous page: the Regions-Events Network.
+                Below, you will see a tool that aims to predict which country will win the upcoming edition of
+                the selected event. The overview of the previous tab allows you to spot countries that,
+                supposedly, participate in very popular or very unpopular events. This page can serve as a
+                tool to investigate whether these participations are a good choice for these countries by looking
+                at their medal chances."),
               
               fluidRow(
-                column(3,
-                       wellPanel(
-                         pickerInput(inputId = "event",
-                                     label = "Select an event",
-                                     choices = c("All",sort(unique(dt.olympics[!is.na(Event)]$Event))),
-                                     width = "100%",
-                                     options = list(`actions-box` = TRUE),
-                                     multiple = T,
-                                     selected = "All")
-                       )
-                ),
-                
-                column(3,
-                       wellPanel(
-                         pickerInput(inputId = "sport",
-                                     label = "Select a sport",
-                                     choices = c("All",sort(unique(dt.olympics[!is.na(Sport)]$Sport))),
-                                     width = "100%",
-                                     options = list(`actions-box` = TRUE),
-                                     multiple = T,
-                                     selected = "All")
-                       )
-                ),
-                
-                column(3,
-                       wellPanel(
-                         pickerInput(inputId = "games",
-                                     label = "Select the Games",
-                                     choices = c("All",sort(unique(dt.olympics[!is.na(Games)]$Games))),
-                                     width = "100%",
-                                     options = list(`actions-box` = TRUE),
-                                     multiple = T,
-                                     selected = "All")
-                       )
-                ),
-                
-                column(3,
-                       wellPanel(
-                         pickerInput(
-                           inputId = "centrality.na2",
-                           label = "Centrality measure",
-                           choices = c("Degree",
-                                       "Closeness",
-                                       "Betweenness",
-                                       "Eigenvector"),
-                           width = "100%",
-                           options = list(`actions-box` = TRUE),
-                           multiple = F,
-                           selected = "Degree"))
-                ),
-                
-                HTML(strrep(br(), 6)),
-                
-                h2("Region-Sports Network Centralities"),
-                dataTableOutput("regions.sports.graph.table"),
-                
-                HTML(strrep(br(), 2)),
-                
-                h2("Region-Sports Network plot"),
-                dataTableOutput("regions.sports.graph.plot")
                 
               )
               ),

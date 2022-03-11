@@ -2,8 +2,7 @@
 
 shinyServer(function(input, output, body){
   
-  
-  # filters, reactive and passed to rendertexts and table
+  # Filters, reactive and passed to renderTexts and table
   tbinput <- reactive({
     data = dt.all.data
     if (input$sex != "All") {
@@ -16,7 +15,7 @@ shinyServer(function(input, output, body){
     data
   })
   
-  # upper statistics of descriptive page
+  # Upper statistics of descriptive page
   output$athletes <- renderText(paste({
     n_distinct(tbinput()$ID)
   }))
@@ -44,18 +43,18 @@ shinyServer(function(input, output, body){
   }))
   
   
-  # reactive data table, reloads when input changes (therefore not in global)
+  # Reactive data table, reloads when input changes (therefore not in global)
   output$table <- DT::renderDataTable(DT::datatable({
     data <- tbinput()
     
-    # 1. convert medal column to 3 binary columns per medal sort
+    # 1. Convert medal column to 3 binary columns per medal sort
     medals <- to.dummy(data $Medal, "medals")
     data <-cbind(data , medals)
     
-    # 2. initializing dt.n.games for later use (at 6)
+    # 2. Initializing dt.n.games for later use (at 6)
     dt.n.games <- data[, list(Games = unique(Games)), by = region]
     
-    # 3. using aggregate function to find totals per country and change name
+    # 3. Using aggregate function to find totals per country and change name
     dt.bronze <- aggregate(data$medals.Bronze, by=list(region=data$region), FUN=sum)
     names(dt.bronze)[names(dt.bronze)== "x"] <- "Bronze_medals"
     dt.silver <- aggregate(data$medals.Silver, by=list(region=data$region), FUN=sum)
@@ -63,21 +62,21 @@ shinyServer(function(input, output, body){
     dt.gold <- aggregate(data$medals.Gold, by=list(region=data$region), FUN=sum)
     names(dt.gold)[names(dt.gold)== "x"] <- "Gold_medals"
     
-    # 4. combine three aggregate functions datasets per sort of medal back into one dt
+    # 4. Combine three aggregate functions datasets per sort of medal back into one dt
     data <- cbind(dt.bronze, dt.silver, dt.gold)
     data <- subset(data, select = c(region, Bronze_medals, Silver_medals, Gold_medals))
     data$Total_medals = rowSums(data[,c("Bronze_medals", "Silver_medals", "Gold_medals")])
     
-    # 5. make separate dt consisting of countries and number of olympic events joined
+    # 5. Make separate dt consisting of countries and number of olympic events joined
     dt.n.games <- dt.n.games[, list(n_games = .N), by=region][order(region)]
     dt.n.games <- na.omit(dt.n.games)
     data <- merge(data,dt.n.games,by="region")
     
-    # 6. add average of games played column
-    data$Average_per_game <- data$Total_medals/data$n_games
-    data$Average_per_game <- round(data$Average_per_game, digits =1)
+    # 6. Add average of games played column
+    data$Average_per_games <- data$Total_medals/data$n_games
+    data$Average_per_games <- round(data$Average_per_games, digits =1)
     
-    # 7. order from high to low
+    # 7. Order from high to low
     data <- data[order(-data$Total_medals),]
     
     data
@@ -287,49 +286,29 @@ shinyServer(function(input, output, body){
 
     if (input$centrality.na1 == "Degree") {
       
-      dt.regions.sports.centr[, list(name, 
-                                     degree, 
-                                     n_unique_events, 
-                                     n_athletes,
-                                     n_unique_sports,
-                                     n_games,
-                                     n_medals)]
+      dt.regions.events.centr[, list(name, degree, n_unique_events, n_athletes, 
+                                     n_unique_sports, n_games, n_medals)]
       
     }
     
     else if (input$centrality.na1 == "Closeness") {
       
-      dt.regions.sports.centr[, list(name,
-                                     closeness,
-                                     n_unique_events,
-                                     n_athletes,
-                                     n_unique_sports,
-                                     n_games,
-                                     n_medals)]
+      dt.regions.events.centr[, list(name, closeness, n_unique_events, n_athletes, 
+                                     n_unique_sports, n_games, n_medals)]
       
     }
     
     else if (input$centrality.na1 == "Betweenness") {
       
-      dt.regions.sports.centr[, list(name,
-                                     betweenness,
-                                     n_unique_events,
-                                     n_athletes,
-                                     n_unique_sports,
-                                     n_games,
-                                     n_medals)]
+      dt.regions.events.centr[, list(name, betweenness, n_unique_events, n_athletes, 
+                                     n_unique_sports, n_games, n_medals)]
       
     }
     
     else if (input$centrality.na1 == "Eigenvector") {
       
-      dt.regions.sports.centr[, list(name,
-                                     evcent,
-                                     n_unique_events,
-                                     n_athletes,
-                                     n_unique_sports,
-                                     n_games,
-                                     n_medals)]
+      dt.regions.events.centr[, list(name, evcent, n_unique_events, n_athletes, 
+                                     n_unique_sports, n_games, n_medals)]
       
     }
     
@@ -338,64 +317,6 @@ shinyServer(function(input, output, body){
   # output$regions.events.graph.plot <- renderPlot( {
   # 
   #   plot(g.regions.events, vertex.size = 3, label.cex = 0.2)
-  # 
-  # })
-  
-  output$regions.sports.graph.table <- renderDataTable( {
-    
-    if (input$centrality.na2 == "Degree") {
-      
-      dt.regions.sports.centr[, list(name, 
-                                     degree, 
-                                     n_unique_events, 
-                                     n_athletes,
-                                     n_unique_sports,
-                                     n_games,
-                                     n_medals)]
-      
-    }
-    
-    else if (input$centrality.na2 == "Closeness") {
-
-      dt.regions.sports.centr[, list(name,
-                                     closeness,
-                                     n_unique_events,
-                                     n_athletes,
-                                     n_unique_sports,
-                                     n_games,
-                                     n_medals)]
-
-    }
-
-    else if (input$centrality.na2 == "Betweenness") {
-
-      dt.regions.sports.centr[, list(name,
-                                     betweenness,
-                                     n_unique_events,
-                                     n_athletes,
-                                     n_unique_sports,
-                                     n_games,
-                                     n_medals)]
-
-    }
-
-    else if (input$centrality.na2 == "Eigenvector") {
-
-      dt.regions.sports.centr[, list(name,
-                                     evcent,
-                                     n_unique_events,
-                                     n_athletes,
-                                     n_unique_sports,
-                                     n_games,
-                                     n_medals)]
-
-    }
-    
-  })
-  
-  # output$regions.sports.graph.plot <- renderPlot( {
-  #   
-  #   plot(g.regions.sports, vertex.size = 3, label.cex = 0.2)
   # 
   # })
   
