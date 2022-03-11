@@ -11,6 +11,10 @@ shinyServer(function(input, output, body){
     if (input$season != "All") {
       data <- data[data$Season == input$season,]
     }
+    
+    if (input$games != "All") {
+      data <- data[data$Games == input$games,]
+    }
     data <- data[data$Year >= min(input$years) & data$Year <= max(input$years),]
     data
   })
