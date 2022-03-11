@@ -176,13 +176,6 @@ g.regions.events.bipartite <- graph_from_data_frame(dt.olympics[,list(region, Ev
 # Projection into the region space
 g.regions.events <- bipartite.projection(g.regions.events.bipartite)$proj1
 
-# Summary of the region graph, where all regions are nodes that are connected with each
-# other when they have an event where they both compete in
-summary(g.regions.events)
-
-# Plot of the network
-# plot(g.regions.events, vertex.size = 3, label.cex = 0.2)
-
 # Calculating centrality measures
 V(g.regions.events)$degree      <- degree(g.regions.events)
 V(g.regions.events)$closeness   <- closeness(g.regions.events)
@@ -212,13 +205,6 @@ g.regions.sports.bipartite <- graph_from_data_frame(dt.olympics[,list(region, Sp
 
 # Projection into the region space
 g.regions.sports <- bipartite.projection(g.regions.sports.bipartite)$proj1
-
-# Summary of the region graph, where all regions are nodes that are connected with each
-# other when they have a sport where they both compete in
-summary(g.regions.sports)
-
-# Plot of the network
-# plot(g.regions.sports, vertex.size = 3, label.cex = 0.2)
 
 # Calculating centrality measures
 V(g.regions.sports)$degree      <- degree(g.regions.sports)

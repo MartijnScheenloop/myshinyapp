@@ -283,16 +283,29 @@ shinyServer(function(input, output, body){
     
   })
   
-  output$graph.table <- renderDataTable( {
-    # data <- dt.olympics
-    # 
-    # # Event filter - DOES NOT WORK YET
-    # if (input$event != "All") {
-    #   data <- data[data$Event == input$event,]
-    # }
-    dt.olympics
+  output$regions.events.graph.table <- renderDataTable( {
+
+    dt.regions.events.centr
+    
   })
   
+  # output$regions.events.graph.plot <- renderPlot( {
+  #   
+  #   plot(g.regions.events)
+  #   
+  # })
+  
+  output$regions.sports.graph.table <- renderDataTable( {
+    
+    dt.regions.sports.centr
+    
+  })
+  
+  # output$regions.sports.graph.plot <- renderPlot( {
+  #   
+  #   plot(g.regions.sports)
+  #   
+  # })
   
 }
 )
