@@ -37,8 +37,8 @@ shinyUI(dashboardPage(
         "Network Analysis",
         icon = icon("fa-solid fa-globe"),
         tabName = "na",
-        menuSubItem("Network Visualization 1", tabName = "nv1"),
-        menuSubItem("Network Visualization 2", tabName = "nv2")
+        menuSubItem("Regions-Events Network", tabName = "na1"),
+        menuSubItem("Regions-Sports Network", tabName = "na2")
         ),
       
       menuItem(
@@ -67,11 +67,11 @@ shinyUI(dashboardPage(
               every two years."),
               tags$head(tags$style("h1 {color: black; font-weight: bold; text-align: center;")),
               tags$head(tags$style("h4 {color: black; font-weight: italic; text-align: center;")),
-              tags$head(tags$style("p {color:black; font-size: 15px; font-weight: italic; border-style: double;}")),
+              tags$head(tags$style("p {font-size: 15px; font-weight: italic; border-style: double;}")),
       ),
       
       tabItem(tabName = "dd",
-              h2("Description of Dataset"),
+              h1("Description of Dataset"),
               br(),
               h3("Each row represents an athlete competing in an olympic event"),
               br(),
@@ -172,7 +172,7 @@ shinyUI(dashboardPage(
       ),
       
       tabItem(tabName = "ss",
-              h2("Descriptive Statistics"),
+              h1("Descriptive Statistics"),
               
               fluidRow(
                 column(2, 
@@ -283,15 +283,23 @@ shinyUI(dashboardPage(
       
       # Worldmap is created here #
       tabItem(tabName = "wm",
+              h1("World Map"),
               fluidRow(box(
                 p("This tab displays the world map. When you hover over a country the total
                   amount of medals won by that country will be displayed."),
                 htmlOutput("wm"), width = "100%"
               ))),
       
-      tabItem(tabName = "nv"),
+      tabItem(tabName = "nv",
+              h1("Network Visualization"),
+              ),
+      
       tabItem(tabName = "nds",
-              h2("Network descriptives"),
+              h1("Network Descriptive Statistics"),
+              
+              p("On this page, two networks have been created that contain sporting events and the 
+                athletes that compete in these. The filters below alow the user to select which network
+                they wish to see: sporting events and the athletes for the sport of Boxing or Football."),
               
               fluidRow( 
                 
@@ -323,20 +331,29 @@ shinyUI(dashboardPage(
                            selected = "Degree centrality"))
                 ),
                 
+                HTML(strrep(br(), 7)),
                 
-                h2("Network descriptives"),
-                tableOutput("descriptives"),
-                h2("Summary of the centralities"),
-                tableOutput("centralities"),
-                h2("degree distribution"),
+                column(4,
+                       h2("Network Descriptives"),
+                       tableOutput("descriptives")
+                ),
+                
+                column(4,
+                       h2("Centralities Summary"),
+                       tableOutput("centralities")
+                ),
+                
+                HTML(strrep(br(), 15)),
+
+                h2("Degree Distribution"),
                 plotOutput("distribution")
               )
               
               
       ),
       
-      tabItem(tabName = "nv1",
-              h2("Network Analysis on Regions"),
+      tabItem(tabName = "na1",
+              h1("Regions-Events Network Analysis"),
               
               p("This page shows a network analysis on the dataset of this app. The network aims to discover the relations
                 between the various regions in the dataset. Every region participates in several sports and events with
@@ -359,7 +376,9 @@ shinyUI(dashboardPage(
                 )
       ),
 
-      tabItem(tabName = "nv2"),
+      tabItem(tabName = "na2",
+              h1("Regions-Sports Network Analysis"),
+              ),
       
       # About us page content #
       tabItem(tabName = "atc",

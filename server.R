@@ -101,16 +101,6 @@ shinyServer(function(input, output, body){
     )
   })
 
-  output$graph.table <- renderDataTable( {
-    # data <- dt.olympics
-    # 
-    # # Event filter - DOES NOT WORK YET
-    # if (input$event != "All") {
-    #   data <- data[data$Event == input$event,]
-    # }
-    dt.olympics
-  })
-  
   output$centralities <- renderTable({
     
     if (input$network == "Bipartite network: Events and Athletes, boxing"){
@@ -233,9 +223,6 @@ shinyServer(function(input, output, body){
     
     dt.centrality.statistics
     
-    
-    
-    
   })
   
   output$descriptives <- renderTable({ 
@@ -281,19 +268,31 @@ shinyServer(function(input, output, body){
   
   output$distribution <- renderPlot({ 
     if (input$network == "Bipartite network: Events and Athletes, boxing"){
-      plot_distribution <- qplot(V(g.olympics)$degree)
+      plot_distribution <- qplot(V(g.olympics)$degree,
+                                 xlab = "Degree", ylab = "Count")
       
     }
     
     if (input$network == "Bipartite network: Events and Athletes, Football"){
-      plot_distribution <- qplot(V(g.olympics.football.2010)$degree)
-      
+      plot_distribution <- qplot(V(g.olympics.football.2010)$degree,
+                                 xlab = "Degree", ylab = "Count")
     }
     
     plot_distribution
     
     
   })
+  
+  output$graph.table <- renderDataTable( {
+    # data <- dt.olympics
+    # 
+    # # Event filter - DOES NOT WORK YET
+    # if (input$event != "All") {
+    #   data <- data[data$Event == input$event,]
+    # }
+    dt.olympics
+  })
+  
   
 }
 )
