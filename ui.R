@@ -384,7 +384,19 @@ shinyUI(dashboardPage(
                            multiple = F,
                            selected = "Degree"))
                 ),
-                
+
+                # column(3,
+                #        wellPanel(
+                #          pickerInput(inputId = "games",
+                #                      label = "Select the Games",
+                #                      choices = c("All",sort(unique(dt.olympics[!is.na(Games)]$Games))),
+                #                      width = "100%",
+                #                      options = list(`actions-box` = TRUE),
+                #                      multiple = T,
+                #                      selected = "All")
+                #        )
+                # ),
+                # 
                 # column(3,
                 #        wellPanel(
                 #          pickerInput(inputId = "sport",
@@ -397,17 +409,6 @@ shinyUI(dashboardPage(
                 #        )
                 # ),
                 # 
-                # column(3,
-                #        wellPanel(
-                #          pickerInput(inputId = "games",
-                #                      label = "Select the Games",
-                #                      choices = c("All",sort(unique(dt.olympics[!is.na(Games)]$Games))),
-                #                      width = "100%",
-                #                      options = list(`actions-box` = TRUE),
-                #                      multiple = T,
-                #                      selected = "All")
-                #        )
-                # ),
                 
                 HTML(strrep(br(), 6)),
                 

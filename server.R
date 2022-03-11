@@ -314,11 +314,13 @@ shinyServer(function(input, output, body){
     
   })
   
-  # output$regions.events.graph.plot <- renderPlot( {
-  # 
-  #   plot(g.regions.events, vertex.size = 3, label.cex = 0.2)
-  # 
-  # })
+  output$regions.events.graph.plot <- renderPlot( {
+    if (input$games != "All") {
+      
+    plot(g.regions.events, vertex.size = 3, label.cex = 0.2)
+      
+    }
+  })
   
 }
 )

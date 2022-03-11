@@ -53,22 +53,6 @@ dt.region.numbers <- merge(dt.region.numbers,
                            by = "region")
 
 
-# Obtaining number of athletes, medals, unique events and sports per Games 
-dt.games.numbers <- dt.olympics[, .(n_athletes = length(unique(ID))), by = Games]
-dt.games.numbers <- merge(dt.games.numbers,
-                          dt.olympics[, .(n_medals = sum(!is.na(Medal))), by = Games],
-                          by = "Games")
-dt.games.numbers <- merge(dt.games.numbers,
-                          dt.olympics[, .(n_unique_events = length(unique(Event))), by = Games],
-                          by = "Games")
-dt.games.numbers <- merge(dt.games.numbers,
-                          dt.olympics[, .(n_unique_sports = length(unique(Sport))), by = Games],
-                          by = "Games")
-dt.games.numbers <- merge(dt.games.numbers,
-                          dt.olympics[, .(n_regions = length(unique(region))), by = Games],
-                          by = "Games")
-
-
 
 ### HERE THE DATA FOR THE WORLDMAP IS MADE ###
 
