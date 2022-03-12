@@ -70,6 +70,7 @@ shinyUI(dashboardPage(
               tags$head(tags$style("p {font-size: 15px; font-weight: italic; border-style: double;}")),
       ),
       
+      ## Page with description of dataset
       tabItem(tabName = "dd",
               h1("Description of Dataset"),
               br(),
@@ -173,9 +174,11 @@ shinyUI(dashboardPage(
               ),
       ),
       
+      ## Page with descriptive statistics
       tabItem(tabName = "ss",
               h1("Descriptive Statistics"),
               
+              # information columns set up
               fluidRow(
                 column(2, 
                        h4("Athletes")
@@ -197,6 +200,7 @@ shinyUI(dashboardPage(
                 )
               ),
               
+              # output for information columns set up
               fluidRow(
                 column(2, 
                        wellPanel (
@@ -236,6 +240,7 @@ shinyUI(dashboardPage(
                 )
               ),
               
+              # filters set up
               fluidRow(
                 column(6,
                        sliderInput(
@@ -276,7 +281,20 @@ shinyUI(dashboardPage(
                                    multiple = F,
                                    selected = "All")
                 ),
-                DT::dataTableOutput("table"),
+                
+                # table and two plots set up here
+                
+                  DT::dataTableOutput("table"),
+                br(),
+                fluidRow(
+                  column(6,
+                         wellPanel(
+                           plotOutput("top10plot"))),
+                  column(6,
+                         wellPanel(
+                           plotOutput("top10plotyears")))),
+                
+                # description set up here
                 column(width = 9,
                        p("It first must be noted that the medals counts found in the tabel are the sum of the all the medals received
                          by a country's atheletes. Meaning that if a football teams wins gold this counts as 11 gold medals instead of

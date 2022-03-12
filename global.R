@@ -12,6 +12,8 @@ library(varhandle)
 library(rworldmap)
 library(googleVis)
 library(dplyr)
+library(highcharter)
+library(tidyverse)
 
 ### LOADING AND PREPARING THE DATA ###
 dt.athletes.events <- fread("athlete_events.csv")

@@ -46,7 +46,6 @@ shinyServer(function(input, output, body){
     nrow(dt.med)
   }))
   
-  
   # Reactive data table, reloads when input changes (therefore not in global)
   output$table <- DT::renderDataTable(DT::datatable({
     data <- tbinput()
@@ -82,10 +81,57 @@ shinyServer(function(input, output, body){
     
     # 7. Order from high to low
     data <- data[order(-data$Total_medals),]
-    
     data
-    
   }))
+  
+  # reactive top 10 medals per region throughout the years
+  output$top10plotyears <- renderPlot({
+    dt.x<- tbinput()
+    
+    # filter on all rows that scored medals
+    dt.x <- dt.x[!(dt.x$Medal=="NA")]
+    
+    # filter on rows top 10 countries of given reactive input
+    dt.x [, n_medals := .N, by=region]
+    dt.top <- unique(dt.x, by = "region")
+    dt.top <- dt.top[order(-dt.top$n_medals),]
+    dt.top <- head(dt.top, 10)
+    f <- dt.top$region
+    dt.x <- subset(dt.x, region %in% f)
+    
+    # initializing plot
+    ggplot(dt.x %>% 
+             group_by(region) %>% 
+             arrange(Year) %>% 
+             mutate(rn = row_number())) + 
+      geom_smooth(method=loess, aes(x=Year, y=rn, color=region)) +
+      theme_classic() +
+      labs(y = "Total medals", x = "Year") + 
+      ggtitle("Top 10 regions with most medals through the years") +theme(
+        plot.title = element_text(size=10, hjust = 0.5))
+  })
+  
+  output$top10plot <- renderPlot({
+    dt.x<- tbinput()
+    
+    # filter on all rows that scored medals
+    dt.x <- dt.x[!(dt.x$Medal=="NA")]
+    
+    # filter on rows top 10 countries of given reactive input
+    dt.x [, n_medals := .N, by=region]
+    dt.top <- unique(dt.x, by = "region")
+    dt.top <- dt.top[order(-dt.top$n_medals),]
+    dt.top <- head(dt.top, 10)
+    f <- dt.top$region
+    dt.x <- subset(dt.x, region %in% f)
+    
+    # initializing plot
+    ggplot(dt.x, aes(x = fct_rev(fct_infreq(region)))) +
+      geom_bar(stat = "count", fill="steelblue") + theme_classic() +
+      coord_flip() + labs(y = "Total medals", x = "Region") + 
+      ggtitle("Top 10 regions with most medal") +  theme(
+        plot.title = element_text(size=10, hjust = 0.5))
+  })
   
   # World Map is created from here #
   dt.country.medals$Total_medals =
