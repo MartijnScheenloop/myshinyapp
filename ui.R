@@ -38,7 +38,7 @@ shinyUI(dashboardPage(
         icon = icon("fa-solid fa-globe"),
         tabName = "na",
         menuSubItem("Centrality Analysis", tabName = "na1"),
-        menuSubItem("Link Prediction", tabName = "na2")
+        menuSubItem("Popular Events", tabName = "na2")
         ),
       
       menuItem(
@@ -52,7 +52,7 @@ shinyUI(dashboardPage(
     tabItems(
       ## Homepage with welcome message and general information ##
       tabItem(tabName = "hp",
-              h1("Welcome to our shiny application!"),
+              h1("Welcome to OlympicLinks!"),
               img(src = "hpimage-modified.png", height = 500, width = "100%", inline = FALSE),
               h4("This application will offer you the opportunity to explore the data from all olympic games (1896 - 2016) through network analytics."),
               br(),
@@ -176,9 +176,9 @@ shinyUI(dashboardPage(
       
       ## Page with descriptive statistics
       tabItem(tabName = "ss",
-              h1("Descriptive Statistics"),
+              h1("Summary Statistics"),
               
-              # information columns set up
+              # Information columns set up
               fluidRow(
                 column(2, 
                        h4("Athletes")
@@ -282,8 +282,10 @@ shinyUI(dashboardPage(
                                    selected = "All")
                 ),
                 
-                # table and two plots set up here
+                HTML(strrep(br(), 5)),
                 
+                # table and two plots set up here
+                h2("Medal Statistics"),
                   DT::dataTableOutput("table"),
                 br(),
                 fluidRow(
@@ -342,10 +344,7 @@ shinyUI(dashboardPage(
                   visNetworkOutput("mynetwork"),
                   DT::dataTableOutput("athletes1")
                 )
-                
-                
               )
-              
       ),
       
       
@@ -436,57 +435,75 @@ shinyUI(dashboardPage(
                            selected = "Degree"))
                 ),
 
-                # column(3,
-                #        wellPanel(
-                #          pickerInput(inputId = "games",
-                #                      label = "Select the Games",
-                #                      choices = c("All",sort(unique(dt.olympics[!is.na(Games)]$Games))),
-                #                      width = "100%",
-                #                      options = list(`actions-box` = TRUE),
-                #                      multiple = T,
-                #                      selected = "All")
-                #        )
-                # ),
-                # 
-                # column(3,
-                #        wellPanel(
-                #          pickerInput(inputId = "sport",
-                #                      label = "Select a sport",
-                #                      choices = c("All",sort(unique(dt.olympics[!is.na(Sport)]$Sport))),
-                #                      width = "100%",
-                #                      options = list(`actions-box` = TRUE),
-                #                      multiple = T,
-                #                      selected = "All")
-                #        )
-                # ),
+                column(3,
+                       wellPanel(
+                         pickerInput(inputId = "games",
+                                     label = "Select the Games",
+                                     choices = c("All",sort(unique(dt.olympics[!is.na(Games)]$Games))),
+                                     width = "100%",
+                                     options = list(`actions-box` = TRUE),
+                                     multiple = F,
+                                     selected = "All")
+                       )
+                ),
+
+                column(3,
+                       wellPanel(
+                         pickerInput(inputId = "sport",
+                                     label = "Select a sport",
+                                     choices = c("All",sort(unique(dt.olympics[!is.na(Sport)]$Sport))),
+                                     width = "100%",
+                                     options = list(`actions-box` = TRUE),
+                                     multiple = F,
+                                     selected = "All")
+                       )
+                ),
                 
                 HTML(strrep(br(), 6)),
                 
                 h2("Network Centralities"),
                 dataTableOutput("regions.events.graph.table"),
                 
-                # HTML(strrep(br(), 2)),
-                # 
-                # h2("Region-Events Network plot"),
-                # dataTableOutput("regions.events.graph.plot")
-                
+                HTML(strrep(br(), 2)),
+
+                h2("Region-Events Network plot"),
+                visNetworkOutput("regions.events.graph.plot")
                 )
       ),
 
       tabItem(tabName = "na2",
-              h1("Regions-Events Network Link Prediction"),
-              
-              p("This page considers the network presented in the previous page: the Regions-Events Network.
-                Below, you will see a tool that aims to predict which country will win the upcoming edition of
-                the selected event. The overview of the previous tab allows you to spot countries that,
-                supposedly, participate in very popular or very unpopular events. This page can serve as a
-                tool to investigate whether these participations are a good choice for these countries by looking
-                at their medal chances."),
-              
+              h1("Regions-Events Network Popular Events"),
+
+              p("This page serves as an auxiliary tool for the previous page. On the previous page, the various
+                centrality measures of Olympic regions could be investigated, along with some participation
+                statistics regarding these countries. This information comes from the Regions-Events Network
+                and can raise questions regarding the events these regions participate in. Therefore, this page
+                shows the most popular events of the Olympics, based on the number of athlete participations.
+                The filter allows the users to investigate this for every region."),
+
               fluidRow(
                 
-              )
-              ),
+                h2("Popular Events plot"),
+                plotOutput("popular.events.plot"),
+                
+                    column(3,
+                           wellPanel(
+                             pickerInput(inputId = "region",
+                                         label = "Select a region",
+                                         choices = c("All",sort(unique(dt.olympics[!is.na(region)]$region))),
+                                         width = "100%",
+                                         options = list(`actions-box` = TRUE),
+                                         multiple = F,
+                                         selected = "All")
+                             )
+                           ),
+                    
+                    HTML(strrep(br(), 6)),
+                  
+                  h2("Popular Events table"),
+                  dataTableOutput("popular.events.table")
+                  )
+      ),
       
       # About us page content #
       tabItem(tabName = "atc",

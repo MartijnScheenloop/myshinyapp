@@ -108,7 +108,7 @@ shinyServer(function(input, output, body){
       theme_classic() +
       labs(y = "Total medals", x = "Year") + 
       ggtitle("Top 10 regions with most medals through the years") +theme(
-        plot.title = element_text(size=10, hjust = 0.5))
+        plot.title = element_text(size = 17, hjust = 0.5))
   })
   
   output$top10plot <- renderPlot({
@@ -130,7 +130,7 @@ shinyServer(function(input, output, body){
       geom_bar(stat = "count", fill="steelblue") + theme_classic() +
       coord_flip() + labs(y = "Total medals", x = "Region") + 
       ggtitle("Top 10 regions with most medal") +  theme(
-        plot.title = element_text(size=10, hjust = 0.5))
+        plot.title = element_text(size = 18, hjust = 0.5))
   })
   
   # World Map is created from here #
@@ -272,9 +272,6 @@ shinyServer(function(input, output, body){
     
     dt.centrality.statistics
     
-    
-    
-    
   })
   
   output$descriptives <- renderTable({ 
@@ -310,11 +307,10 @@ shinyServer(function(input, output, body){
                                                        transitivity(g.olympics.football.2010, type = "average"),
                                                        mean(diameter(g.olympics.football.2010)),
                                                        diameter(g.olympics.football.2010)))
-      
+  
     }
     
     dt.descriptives.network
-    
     
   })
   
@@ -353,7 +349,6 @@ shinyServer(function(input, output, body){
     if (input$network_choice == "Football players that participated in both olympic events"){
       g.output <- visIgraph(g.olympics.football.2010.subgraph)
     }
-    
     
     g.output
     
@@ -424,10 +419,35 @@ shinyServer(function(input, output, body){
     }
   })
   
-  output$regions.events.graph.plot <- renderPlot( {
+  output$regions.events.graph.plot <- renderVisNetwork( {
     if (input$games != "All") {
-    plot(g.regions.events, vertex.size = 3, label.cex = 0.2)
+      
+      output.na1 <- visIgraph(g.regions.events)
+      
     }
+  })
+  
+  output$popular.events.plot <- renderPlot({
+    
+    # PLot of the most popular Events
+    ggplot(dt.olympics) +
+      geom_bar(aes(x = reorder(Event, Event, function(x)-length(x)))) +
+      coord_flip() + xlab("Event") + ylab("Number of Participations")
+    
+  })
+  
+  output$popular.events.table <- renderDataTable({
+    
+    if (input$region == "All") {
+      dt.p.e.input <- dt.olympics
+    } else {
+      dt.p.e.input <- filter(dt.olympics, region == input$region)
+    }
+    
+    dt.popular.events <- setnames(
+      as.data.table(count(dt.p.e.input, Event))[order(n)],
+      "n", "#Participations")
+    
   })
   
 }

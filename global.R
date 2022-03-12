@@ -81,6 +81,7 @@ dt.country.medals$Country
 
 
 
+### NETWORK EXPLORATION ###
 # Network 1: Games and athletes after 2010 for boxing
 # Creating the right data frame
 dt.graph.games.final <- dt.olympics[Sport == "Boxing",]
@@ -108,9 +109,7 @@ V(g.olympics)$betweenness <- betweenness(g.olympics)
 V(g.olympics)$evcent <- evcent(g.olympics)$vector
 
 
-
 # Network 2: Games and athletes football after 2010
-
 # Creating the right data frame
 dt.graph.football <- dt.olympics[Sport == "Football",]
 dt.graph.football.2010 <-dt.graph.football[Year >= 2010]
@@ -149,7 +148,9 @@ g.olympics.football.2010.subgraph <- induced.subgraph(g.olympics.football.2010, 
 dt.desciptives.table.boxing <- data.table(get.data.frame(g.olympics, "vertices"))
 dt.desciptives.table.football <- data.table(get.data.frame(g.olympics.football.2010, "vertices"))
 
-### NETWORK ANALYSIS 1: REGION-EVENTS NETWORK ###
+
+
+### NETWORK ANALYSIS: REGION-EVENTS NETWORK ###
 ## Creating a network with regions and common events between regions as edges ##
 
 # Get all unique regions and events and combine them
@@ -188,4 +189,3 @@ dt.region.numbers <-
 # Merging the numbers per region with the centrality data.table
 dt.regions.events.centr <- merge(dt.regions.events.centr, dt.region.numbers,
                                  by.x = 'name', by.y = 'region')
-
