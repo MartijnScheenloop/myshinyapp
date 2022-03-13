@@ -472,25 +472,31 @@ shinyUI(dashboardPage(
       ),
 
       tabItem(tabName = "na2",
-              h1("Regions-Events Network Popular Events"),
+              h1("Regions-Events Network Popular Sports/Events"),
 
               p("This page serves as an auxiliary tool for the previous page. On the previous page, the various
                 centrality measures of Olympic regions could be investigated, along with some participation
                 statistics regarding these countries. This information comes from the Regions-Events Network
                 and can raise questions regarding the events these regions participate in. Therefore, this page
-                shows the most popular events of the Olympics, based on the number of athlete participations.
-                The filter allows the users to investigate this for every region."),
+                shows the most popular events and sports of the Olympics, based on the number of athlete 
+                participations. Given this fact, it must be accounted for that team sporting events naturally
+                have many parcticipations, due to their nature, and will thus prove to be quite popular. 
+                The filters allow the users to investigate this for every region and sport."),
 
               fluidRow(
                 
-                h2("Popular Events plot"),
-                plotOutput("popular.events.plot"),
+                h2("Popular Sports plot"),
+                plotOutput("popular.sports.plot"),
+                
+                HTML(strrep(br(), 2)),
+                
+                h2("Popular Events/Sports tables"),
                 
                     column(3,
                            wellPanel(
                              pickerInput(inputId = "region",
                                          label = "Select a region",
-                                         choices = c("All",sort(unique(dt.olympics[!is.na(region)]$region))),
+                                         choices = c("All", sort(unique(dt.olympics[!is.na(region)]$region))),
                                          width = "100%",
                                          options = list(`actions-box` = TRUE),
                                          multiple = F,
@@ -498,10 +504,26 @@ shinyUI(dashboardPage(
                              )
                            ),
                     
-                    HTML(strrep(br(), 6)),
-                  
-                  h2("Popular Events table"),
-                  dataTableOutput("popular.events.table")
+                    # column(3,
+                    #        wellPanel(
+                    #          pickerInput(inputId = "sport",
+                    #                      label = "Select a sport",
+                    #                      choices = c(sort(unique(dt.olympics[!is.na(Sport)]$Sport))),
+                    #                      width = "100%",
+                    #                      options = list(`actions-box` = TRUE),
+                    #                      multiple = T,
+                    #                      selected = "Select All")
+                    #        )
+                    # ),                    
+                
+                HTML(strrep(br(), 8)),
+                
+                column(6,
+                       dataTableOutput("popular.events.table")
+                       ),
+                column(6,
+                         dataTableOutput("popular.sports.table")
+                       )
                   )
       ),
       

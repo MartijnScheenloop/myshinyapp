@@ -4,7 +4,7 @@ shinyServer(function(input, output, body){
   
   # Filters, reactive and passed to renderTexts and table
   tbinput <- reactive({
-    data = dt.all.data
+    data <- dt.all.data
     if (input$sex != "All") {
       data <- data[data$Sex == input$sex,]
     }
@@ -60,8 +60,10 @@ shinyServer(function(input, output, body){
     # 3. Using aggregate function to find totals per country and change name
     dt.bronze <- aggregate(data$medals.Bronze, by=list(region=data$region), FUN=sum)
     names(dt.bronze)[names(dt.bronze)== "x"] <- "Bronze_medals"
+    
     dt.silver <- aggregate(data$medals.Silver, by=list(region=data$region), FUN=sum)
     names(dt.silver)[names(dt.silver)== "x"] <- "Silver_medals"
+    
     dt.gold <- aggregate(data$medals.Gold, by=list(region=data$region), FUN=sum)
     names(dt.gold)[names(dt.gold)== "x"] <- "Gold_medals"
     
@@ -84,14 +86,14 @@ shinyServer(function(input, output, body){
     data
   }))
   
-  # reactive top 10 medals per region throughout the years
+  # Reactive top 10 medals per region throughout the years
   output$top10plotyears <- renderPlot({
     dt.x<- tbinput()
     
-    # filter on all rows that scored medals
+    # Filter on all rows that scored medals
     dt.x <- dt.x[!(dt.x$Medal=="NA")]
     
-    # filter on rows top 10 countries of given reactive input
+    # Filter on rows top 10 countries of given reactive input
     dt.x [, n_medals := .N, by=region]
     dt.top <- unique(dt.x, by = "region")
     dt.top <- dt.top[order(-dt.top$n_medals),]
@@ -99,7 +101,7 @@ shinyServer(function(input, output, body){
     f <- dt.top$region
     dt.x <- subset(dt.x, region %in% f)
     
-    # initializing plot
+    # Initializing plot
     ggplot(dt.x %>% 
              group_by(region) %>% 
              arrange(Year) %>% 
@@ -112,12 +114,12 @@ shinyServer(function(input, output, body){
   })
   
   output$top10plot <- renderPlot({
-    dt.x<- tbinput()
+    dt.x <- tbinput()
     
-    # filter on all rows that scored medals
+    # Filter on all rows that scored medals
     dt.x <- dt.x[!(dt.x$Medal=="NA")]
     
-    # filter on rows top 10 countries of given reactive input
+    # Filter on rows top 10 countries of given reactive input
     dt.x [, n_medals := .N, by=region]
     dt.top <- unique(dt.x, by = "region")
     dt.top <- dt.top[order(-dt.top$n_medals),]
@@ -125,7 +127,7 @@ shinyServer(function(input, output, body){
     f <- dt.top$region
     dt.x <- subset(dt.x, region %in% f)
     
-    # initializing plot
+    # Initializing plot
     ggplot(dt.x, aes(x = fct_rev(fct_infreq(region)))) +
       geom_bar(stat = "count", fill="steelblue") + theme_classic() +
       coord_flip() + labs(y = "Total medals", x = "Region") + 
@@ -271,7 +273,7 @@ shinyServer(function(input, output, body){
     }
     
     dt.centrality.statistics
-    
+
   })
   
   output$descriptives <- renderTable({ 
@@ -395,6 +397,7 @@ shinyServer(function(input, output, body){
     dt.subgraph
     
   }))
+
   
   output$regions.events.graph.table <- renderDataTable( {
 
@@ -427,12 +430,23 @@ shinyServer(function(input, output, body){
     }
   })
   
+  output$popular.sports.plot <- renderPlot({
+    
+    dt.sport.count <- head(as.data.table(count(dt.olympics, Sport))[order(-n)], 5)
+    
+    # PLot of the most popular Sports
+    ggplot(dt.sport.count, aes(x = reorder(Sport,n), y = n)) + geom_bar(stat='identity', fill = "blue") + 
+      coord_flip() + xlab("Sport") + ylab("Number of Participations")
+    
+  })
+  
   output$popular.events.plot <- renderPlot({
     
+    dt.sport.count <- head(as.data.table(count(dt.olympics, Sport))[order(-n)], 5)
+    
     # PLot of the most popular Events
-    ggplot(dt.olympics) +
-      geom_bar(aes(x = reorder(Event, Event, function(x)-length(x)))) +
-      coord_flip() + xlab("Event") + ylab("Number of Participations")
+    ggplot(dt.sport.count, aes(x = reorder(Sport,n), y = n)) + geom_bar(stat='identity', fill = "blue") + 
+      coord_flip() + xlab("Sport") + ylab("Number of Participations")
     
   })
   
@@ -445,8 +459,20 @@ shinyServer(function(input, output, body){
     }
     
     dt.popular.events <- setnames(
-      as.data.table(count(dt.p.e.input, Event))[order(n)],
-      "n", "#Participations")
+      as.data.table(count(dt.p.e.input, Event))[order(n)], "n", "#Participations")
+    
+  })
+  
+  output$popular.sports.table <- renderDataTable({
+    
+    if (input$region == "All") {
+      dt.p.s.input <- dt.olympics
+    } else {
+      dt.p.s.input <- filter(dt.olympics, region == input$region)
+    }
+    
+    dt.popular.sports <- setnames(
+      as.data.table(count(dt.p.s.input, Sport))[order(n)], "n", "#Participations")
     
   })
   
