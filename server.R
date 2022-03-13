@@ -57,21 +57,21 @@ shinyServer(function(input, output, body){
     data <- tbinput()
     
     # 1. Convert medal column to 3 binary columns per medal sort
-    medals <- to.dummy(data $Medal, "medals")
-    data <-cbind(data , medals)
+    medals <- to.dummy(data$Medal, "medals")
+    data <- cbind(data , medals)
     
     # 2. Initializing dt.n.games for later use (at 6)
     dt.n.games <- data[, list(Games = unique(Games)), by = region]
     
     # 3. Using aggregate function to find totals per country and change name
-    dt.bronze <- aggregate(data$medals.Bronze, by=list(region=data$region), FUN=sum)
-    names(dt.bronze)[names(dt.bronze)== "x"] <- "Bronze_medals"
+    dt.bronze <- aggregate(data$medals.Bronze, by = list(region=data$region), FUN=sum)
+    names(dt.bronze)[names(dt.bronze) == "x"] <- "Bronze_medals"
     
-    dt.silver <- aggregate(data$medals.Silver, by=list(region=data$region), FUN=sum)
-    names(dt.silver)[names(dt.silver)== "x"] <- "Silver_medals"
+    dt.silver <- aggregate(data$medals.Silver, by = list(region = data$region), FUN = sum)
+    names(dt.silver)[names(dt.silver) == "x"] <- "Silver_medals"
     
-    dt.gold <- aggregate(data$medals.Gold, by=list(region=data$region), FUN=sum)
-    names(dt.gold)[names(dt.gold)== "x"] <- "Gold_medals"
+    dt.gold <- aggregate(data$medals.Gold, by = list(region = data$region), FUN = sum)
+    names(dt.gold)[names(dt.gold) == "x"] <- "Gold_medals"
     
     # 4. Combine three aggregate functions datasets per sort of medal back into one dt
     data <- cbind(dt.bronze, dt.silver, dt.gold)
@@ -79,9 +79,9 @@ shinyServer(function(input, output, body){
     data$Total_medals = rowSums(data[,c("Bronze_medals", "Silver_medals", "Gold_medals")])
     
     # 5. Make separate dt consisting of countries and number of olympic events joined
-    dt.n.games <- dt.n.games[, list(n_games = .N), by=region][order(region)]
+    dt.n.games <- dt.n.games[, list(n_games = .N), by = region][order(region)]
     dt.n.games <- na.omit(dt.n.games)
-    data <- merge(data,dt.n.games,by="region")
+    data <- merge(data,dt.n.games,by = "region")
     
     # 6. Add average of games played column
     data$Average_per_games <- data$Total_medals/data$n_games
@@ -94,10 +94,10 @@ shinyServer(function(input, output, body){
   
   # Reactive top 10 medals per region throughout the years
   output$top10plotyears <- renderPlot({
-    dt.x<- tbinput()
+    dt.x <- tbinput()
     
     # Filter on all rows that scored medals
-    dt.x <- dt.x[!(dt.x$Medal=="NA")]
+    dt.x <- dt.x[!(dt.x$Medal == "NA")]
     
     # Filter on rows top 10 countries of given reactive input
     dt.x [, n_medals := .N, by=region]
@@ -112,7 +112,7 @@ shinyServer(function(input, output, body){
              group_by(region) %>% 
              arrange(Year) %>% 
              mutate(rn = row_number())) + 
-      geom_smooth(method=loess, aes(x=Year, y=rn, color=region)) +
+      geom_smooth(method = loess, aes(x = Year, y = rn, color = region)) +
       theme_classic() +
       labs(y = "Total medals", x = "Year") + 
       ggtitle("Top 10 regions with most medals through the years") +theme(
@@ -164,9 +164,7 @@ shinyServer(function(input, output, body){
   
   ### NETWORK EXPLORATION ###
   output$centralities <- renderTable({
-    
     if (input$network == "Bipartite network: Events and Athletes, boxing"){
-      
       if (input$centrality == "Degree centrality") {
         dt.centrality.statistics <- data.frame(statistic = c('Minimum',
                                                              'Maximum',
@@ -178,7 +176,6 @@ shinyServer(function(input, output, body){
                                                           median(V(g.olympics)$degree),
                                                           mean(V(g.olympics)$degree),
                                                           sd(V(g.olympics)$degree)))
-        
       }
       
       if (input$centrality == "Closeness centrality") {
@@ -192,7 +189,6 @@ shinyServer(function(input, output, body){
                                                           median(V(g.olympics)$closeness),
                                                           mean(V(g.olympics)$closeness),
                                                           sd(V(g.olympics)$closeness)))
-        
       }
       
       if (input$centrality == "Betweenness centrality") {
@@ -206,7 +202,6 @@ shinyServer(function(input, output, body){
                                                           median(V(g.olympics)$betweenness),
                                                           mean(V(g.olympics)$betweenness),
                                                           sd(V(g.olympics)$betweenness)))
-        
       }
       
       if (input$centrality == "Eigenvector centrality") {
@@ -220,11 +215,9 @@ shinyServer(function(input, output, body){
                                                           median(V(g.olympics)$evcent),
                                                           mean(V(g.olympics)$evcent),
                                                           sd(V(g.olympics)$evcent)))
-        
       }}
     
     else if(input$network == "Bipartite network: Events and Athletes, Football") {
-      
       if (input$centrality == "Degree centrality") {
         dt.centrality.statistics <- data.frame(statistic = c('Minimum',
                                                              'Maximum',
@@ -236,7 +229,6 @@ shinyServer(function(input, output, body){
                                                           median(V(g.olympics.football.2010)$degree),
                                                           mean(V(g.olympics)$degree),
                                                           sd(V(g.olympics.football.2010)$degree)))
-        
       }
       
       if (input$centrality == "Closeness centrality") {
@@ -250,7 +242,6 @@ shinyServer(function(input, output, body){
                                                           median(V(g.olympics.football.2010)$closeness),
                                                           mean(V(g.olympics.football.2010)$closeness),
                                                           sd(V(g.olympics.football.2010)$closeness)))
-        
       }
       
       if (input$centrality == "Betweenness centrality"){
@@ -264,7 +255,6 @@ shinyServer(function(input, output, body){
                                                           median(V(g.olympics.football.2010)$betweenness),
                                                           mean(V(g.olympics.football.2010)$betweenness),
                                                           sd(V(g.olympics.football.2010)$betweenness)))
-        
       }
       
       if (input$centrality == "Eigenvector centrality"){
@@ -278,19 +268,13 @@ shinyServer(function(input, output, body){
                                                           median(V(g.olympics.football.2010)$evcent),
                                                           mean(V(g.olympics.football.2010)$evcent),
                                                           sd(V(g.olympics.football.2010)$evcent)))
-        
       }
-      
     }
-    
     dt.centrality.statistics
-
   })
   
   output$descriptives <- renderTable({ 
-    
     if (input$network == "Bipartite network: Events and Athletes, boxing") {
-      
       dt.descriptives.network <- data.frame(statistic = c('Number of Nodes',
                                                           'Number of Edges',
                                                           'Average degree',
@@ -303,11 +287,9 @@ shinyServer(function(input, output, body){
                                                        transitivity(g.olympics, type = "average"),
                                                        mean(diameter(g.olympics)),
                                                        diameter(g.olympics)))
-      
     }
     
     if (input$network == "Bipartite network: Events and Athletes, Football") {
-      
       dt.descriptives.network <- data.frame(statistic = c('Number of Nodes',
                                                           'Number of Edges',
                                                           'Average degree',
@@ -320,99 +302,77 @@ shinyServer(function(input, output, body){
                                                        transitivity(g.olympics.football.2010, type = "average"),
                                                        mean(diameter(g.olympics.football.2010)),
                                                        diameter(g.olympics.football.2010)))
-  
     }
-    
     dt.descriptives.network
-    
   })
   
   output$distribution <- renderPlot({ 
     if (input$network == "Bipartite network: Events and Athletes, boxing"){
       plot_distribution <- qplot(V(g.olympics)$degree)
-      
     }
     
     if (input$network == "Bipartite network: Events and Athletes, Football"){
       plot_distribution <- qplot(V(g.olympics.football.2010)$degree)
-      
     }
-    
     plot_distribution
-    
-    
   })
   
   output$mynetwork <- renderVisNetwork({
     if (input$network_choice == "Bipartite network: Events and Athletes, boxing visualization"){
       g.output <- visIgraph(g.olympics)
-      
     }
     
     if (input$network_choice == "Bipartite network: Events and Athletes, Football visualization"){
       g.output <- visIgraph(g.olympics.football.2010)
-      
     }
     
     if (input$network_choice == "Boxers that participated in both olympic events"){
       g.output <- visIgraph(g.olympics.subgraph)
-      
     }
     
     if (input$network_choice == "Football players that participated in both olympic events"){
       g.output <- visIgraph(g.olympics.football.2010.subgraph)
     }
-    
     g.output
-    
   })
   
   output$descriptives_table <- DT::renderDataTable(DT::datatable({
     if (input$network == "Bipartite network: Events and Athletes, boxing"){
       dt.descriptive.table <- data.table(get.data.frame(g.olympics, "vertices"))
-      
     }
     
     if (input$network == "Bipartite network: Events and Athletes, Football"){
       dt.descriptive.table <- data.table(get.data.frame(g.olympics.football.2010, "vertices"))
-      
     }
-    
     dt.descriptive.table
-    
   }))
   
   output$athletes1 <- DT::renderDataTable(DT::datatable({
     if (input$network_choice == "Boxers that participated in both olympic events"){
       dt.subgraph <- data.table(get.data.frame(g.olympics.subgraph, "vertices"))
       dt.subgraph[, type := NULL][, degree := NULL][, closeness := NULL][, betweenness := NULL][, evcent := NULL]
-      
     }
     
     if (input$network_choice == "Football players that participated in both olympic events"){
       dt.subgraph <- data.table(get.data.frame(g.olympics.football.2010.subgraph, "vertices"))
       dt.subgraph[, type := NULL][, degree := NULL][, closeness := NULL][, betweenness := NULL][, evcent := NULL]
-      
     }
     
     if (input$network_choice == "Bipartite network: Events and Athletes, boxing visualization"){
       dt.subgraph <- NULL
-      
     }
     
     if (input$network_choice == "Bipartite network: Events and Athletes, Football visualization"){
       dt.subgraph <- data.table(get.data.frame(g.olympics.football.2010.subgraph, "vertices"))
       dt.subgraph <- NULL
     }
-    
     dt.subgraph
-    
   }))
 
   ### NETWORK ANALYSIS: REGION-EVENTS NETWORK ###
   # Reactive filters for Network Analysis
   tbinput2 <- reactive({
-    
+
     data2  <- dt.olympics
     
     if (input$games2 != "All") {
@@ -442,7 +402,7 @@ shinyServer(function(input, output, body){
     # Projection into the region space
     g.regions.events <- bipartite.projection(g.regions.events.bipartite)$proj1
     
-    # Calculating centrality measures
+    # Calculating centrality measures (degree, closenss, betweenness, eigenvector)
     V(g.regions.events)$degree      <- degree(g.regions.events)
     V(g.regions.events)$closeness   <- closeness(g.regions.events)
     V(g.regions.events)$betweenness <- betweenness(g.regions.events)
@@ -511,8 +471,8 @@ shinyServer(function(input, output, body){
   
   output$popular.sports.events.plot <- renderPlot({
     
+    # Creating data.tables with number of participations per sport and event
     dt.sport.count <- head(as.data.table(count(dt.olympics, Sport))[order(-n)], 5)
-    
     dt.event.count <- head(as.data.table(count(filter(dt.olympics, Sport == input$sport2), Event))[order(-n)], 5)
     
     if (input$sport2 == "All"){
@@ -538,9 +498,9 @@ shinyServer(function(input, output, body){
       dt.p.s.input <- dt.p.s.input[dt.p.s.input$Games == input$games3,]
     } 
     
+    # Data.table with no. of participations per sport
     dt.popular.sports <- setnames(
       as.data.table(count(dt.p.s.input, Sport))[order(-n)], "n", "#Participations")
-    
   })
   
   output$popular.events.table <- renderDataTable({
@@ -555,9 +515,9 @@ shinyServer(function(input, output, body){
       dt.p.e.input <- dt.p.e.input[dt.p.e.input$Games == input$games3,]
     } 
     
+    # Data.table with no. of participations per event
     dt.popular.events <- setnames(
       as.data.table(count(dt.p.e.input, Event))[order(-n)], "n", "#Participations")
-    
   })
   
 }

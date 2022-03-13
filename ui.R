@@ -180,7 +180,7 @@ shinyUI(dashboardPage(
       tabItem(tabName = "ss",
               h1("Summary Statistics"),
               
-              # Information columns set up
+              # Set up information columns
               fluidRow(
                 column(2, 
                        h4("Athletes")
@@ -202,7 +202,7 @@ shinyUI(dashboardPage(
                 )
               ),
               
-              # output for information columns set up
+              # Output for information columns set up
               fluidRow(
                 column(2, 
                        wellPanel (
@@ -324,9 +324,7 @@ shinyUI(dashboardPage(
       
       tabItem(tabName = "nv",
               h1("Network Visualization"),
-              
               sidebarLayout(
-                
                 sidebarPanel(
                   pickerInput(
                     inputId = "network_choice",
@@ -361,9 +359,7 @@ shinyUI(dashboardPage(
                 measures of each network, an histogram with the degree distributions
                 plotted, and a table that contains all of the centrality measures
                 for each athlete in the data set"),
-              
               sidebarLayout(
-                
                 sidebarPanel(
                   pickerInput(
                     inputId = "network",
@@ -414,13 +410,11 @@ shinyUI(dashboardPage(
       ## Page with Network Analysis
       tabItem(tabName = "na1",
               h1("Regions-Events Centrality Analysis"),
-              
               p("This page shows the Regions-Events Network of the dataset. This network aims to discover
                 the relations between the various regions in the dataset and the events they participate in.
                 Every region participates in several sports and events with their athletes, which is what 
                 this network is about. This network shows the regions as nodes that are connected to each 
                 other when they have participated in the same sporting event."),
-              
               p("The table and plot below allows you to investigate how countries are related to other countries 
                 in terms of sporting events. The table also shows interesting statistics per country, regarding their
                 participation in the Olympic Games. Countries with a degree of 208 are countries that are 
@@ -429,7 +423,6 @@ shinyUI(dashboardPage(
                 number of unique events, such as American Samoa. This indicates that the events they participate
                 in must be quite popular, as they are connected to many countries while having participated in 
                 few events."),
-              
               fluidRow(
                 column(3,
                        wellPanel(
@@ -445,7 +438,6 @@ shinyUI(dashboardPage(
                            multiple = F,
                            selected = "Degree"))
                 ),
-
                 column(3,
                        wellPanel(
                          pickerInput(inputId = "games2",
@@ -457,7 +449,6 @@ shinyUI(dashboardPage(
                                      selected = "All")
                        )
                 ),
-
                 column(3,
                        wellPanel(
                          pickerInput(inputId = "sport",
@@ -469,12 +460,9 @@ shinyUI(dashboardPage(
                                      selected = "All")
                        )
                 ),
-                
                 HTML(strrep(br(), 6)),
-                
                 h2("Network Centralities"),
                 dataTableOutput("regions.events.graph.table"),
-                
                 HTML(strrep(br(), 2)),
 
                 h2("Region-Events Network plot"),
@@ -490,7 +478,6 @@ shinyUI(dashboardPage(
       ## Page with further Network Analysis
       tabItem(tabName = "na2",
               h1("Regions-Events Network Popular Sports/Events"),
-
               p("This page serves as an auxiliary tool for the previous page. On the previous page, the various
                 centrality measures of Olympic regions could be investigated, along with some participation
                 statistics regarding these countries. This information comes from the Regions-Events Network
@@ -499,9 +486,9 @@ shinyUI(dashboardPage(
                 participations. Given this fact though, it must be accounted for that team sporting events naturally
                 have many parcticipations, due to their nature, and will thus prove to be quite popular. 
                 The filters allow the users to investigate this for every region, sport and Games edition."),
-
+              p("The plot below shows the most popular sports by default. Once a sport is selected with the filter
+                though, the most popular events of this sport will show."),
               fluidRow(
-                
                 column(3,
                        wellPanel(
                          pickerInput(inputId = "sport2",
@@ -513,16 +500,13 @@ shinyUI(dashboardPage(
                                      selected = "All")
                        )
                 ),
-                
                 HTML(strrep(br(), 3)),
                 
                 h2("Popular Sports/Events plot (All regions)"),
                 plotOutput("popular.sports.events.plot"),
-                
                 HTML(strrep(br(), 2)),
                 
                 h2("Popular Sports/Events tables"),
-                
                 column(3,
                        wellPanel(
                          pickerInput(inputId = "region",
@@ -534,7 +518,6 @@ shinyUI(dashboardPage(
                                      selected = "All")
                        )
                 ),
-                
                 column(3,
                        wellPanel(
                          pickerInput(inputId = "games3",
@@ -546,9 +529,7 @@ shinyUI(dashboardPage(
                                      selected = "All")
                        )
                 ),
-                
                 HTML(strrep(br(), 8)),
-                
                 column(6,
                        dataTableOutput("popular.sports.table")
                        ),

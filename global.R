@@ -1,5 +1,6 @@
 ## global.R ##
 
+# Loading libraries
 library(visNetwork)
 library(DT)
 library(igraph)
@@ -16,34 +17,34 @@ library(highcharter)
 library(tidyverse)
 
 ### LOADING AND PREPARING THE DATA ###
+# Reading data
 dt.athletes.events <- fread("athlete_events.csv")
 dt.regions <- fread("noc_regions.csv")
 
-# Replace NAs in region (ROT, TUV, UNK)
+# Replace NAs in region (i.e. ROT, TUV, UNK)
 dt.regions[is.na(region)]$region = dt.regions[is.na(region)]$notes
 
-# Merge all data
-dt.olympics <- merge(dt.athletes.events, dt.regions[, list(NOC, region)],
+# Merge participation data with region data
+dt.olympics <- merge(dt.athletes.events, 
+                     dt.regions[, list(NOC, region)],
                      by = 'NOC', 
                      all = TRUE)
 
 # Replace NAs in region for dt.olympics
 # NOC of Singapore was changed from SIN to SGP
-# and UK to United Kingdom 
 # This was not included in dt.regions
 dt.olympics[NOC == "SGP"]$region = "Singapore"
 
-# Change USA and UK to match rworldmap package
+# Change USA and UK region to match rworldmap package
 dt.olympics[NOC == "USA"]$region = "United States"
 dt.olympics[NOC == "UK"]$region = "United Kingdom"
 
-# Remove rows with NA as Event, are useless
+# Remove rows with NA as Event, these are useless
 dt.olympics <- dt.olympics[!is.na(Event)]
 
 
 
 ### HERE THE DATA FOR THE WORLDMAP IS MADE ###
-
 # Create new data table to modify for the world map
 dt.all.data <- dt.olympics
 
@@ -52,18 +53,18 @@ dt.all.data <- dt.olympics
 medals <- to.dummy(dt.all.data $Medal, "medals")
 dt.country.medals <- cbind(dt.all.data , medals)
 
-# Next we calculate the total medals per country and rename the column
+# Next we calculate the total medals per country per kind and rename the column
 dt.bronze <- aggregate(dt.country.medals$medals.Bronze,
-                       by=list(region=dt.country.medals$region), FUN=sum)
-names(dt.bronze)[names(dt.bronze)== "x"] <- "Bronze_medals"
+                       by = list(region = dt.country.medals$region), FUN = sum)
+names(dt.bronze)[names(dt.bronze) == "x"] <- "Bronze_medals"
 
 dt.silver <- aggregate(dt.country.medals$medals.Silver,
-                       by=list(region=dt.country.medals$region), FUN=sum)
-names(dt.silver)[names(dt.silver)== "x"] <- "Silver_medals"
+                       by = list(region = dt.country.medals$region), FUN = sum)
+names(dt.silver)[names(dt.silver) == "x"] <- "Silver_medals"
 
 dt.gold <- aggregate(dt.country.medals$medals.Gold,
-                     by=list(region=dt.country.medals$region), FUN=sum)
-names(dt.gold)[names(dt.gold)== "x"] <- "Gold_medals"
+                     by = list(region = dt.country.medals$region), FUN = sum)
+names(dt.gold)[names(dt.gold) == "x"] <- "Gold_medals"
 
 # We know combine the separate medal data tables back into one data table
 dt.country.medals <- cbind(dt.bronze, dt.silver, dt.gold)
@@ -72,7 +73,7 @@ dt.country.medals <- subset(dt.country.medals, select =
                               c(region, Bronze_medals, Silver_medals, Gold_medals))
 
 dt.country.medals$Total_medals <- rowSums(dt.country.medals
-                                         [,c("Bronze_medals", "Silver_medals", "Gold_medals")])
+                                         [, c("Bronze_medals", "Silver_medals", "Gold_medals")])
 
 # Change the column names for rworldmap compatability
 colnames(dt.country.medals)[1] <- "Country"
@@ -91,22 +92,15 @@ dt.graph.games <- dt.graph.games.final[Year >= 2010,]
 dt.all.athletes <- dt.graph.games[, list(name = unique(Name), type = TRUE)]
 dt.all.games <- dt.graph.games[, list(name = unique(Games), type = FALSE)]
 dt.vertices <- rbind(dt.all.athletes, dt.all.games)
-g.olympics <- graph.data.frame(dt.graph.games[, list(Games, Name)],
+g.olympics.boxing.2010 <- graph.data.frame(dt.graph.games[, list(Games, Name)],
                                directed = F,
                                vertices = dt.vertices)
 
-# Centralities of the network
-# Degree 
-V(g.olympics)$degree <- degree(g.olympics)
-
-# closeness centrality
-V(g.olympics)$closeness <- closeness(g.olympics)
-
-# betweenness centrality
-V(g.olympics)$betweenness <- betweenness(g.olympics)
-
-# eigenvector centrality
-V(g.olympics)$evcent <- evcent(g.olympics)$vector
+# Calculating centrality measures (degree, closenss, betweenness, eigenvector)
+V(g.olympics.boxing.2010)$degree      <- degree(g.olympics.boxing.2010)
+V(g.olympics.boxing.2010)$closeness   <- closeness(g.olympics.boxing.2010)
+V(g.olympics.boxing.2010)$betweenness <- betweenness(g.olympics.boxing.2010)
+V(g.olympics.boxing.2010)$evcent      <- evcent(g.olympics.boxing.2010)$vector
 
 
 # Network 2: Games and athletes football after 2010
@@ -114,36 +108,41 @@ V(g.olympics)$evcent <- evcent(g.olympics)$vector
 dt.graph.football <- dt.olympics[Sport == "Football",]
 dt.graph.football.2010 <-dt.graph.football[Year >= 2010]
 
-# Building the graph
-dt.all.athletes.football.2010 <- dt.graph.football.2010[, list(name = unique(Name),
-                                                               type = TRUE)]
-dt.all.games.football.2010 <- dt.graph.football.2010[, list(name = unique(Games),
-                                                            type = FALSE)]
+# Obtaining the vertices
+dt.all.athletes.football.2010 <- 
+  dt.graph.football.2010[, list(name = unique(Name), type = TRUE)]
+
+dt.all.games.football.2010 <- 
+  dt.graph.football.2010[, list(name = unique(Games), type = FALSE)]
+
+# Get all vertices and combine them
 dt.vertices.football.2010 <- rbind(dt.all.athletes.football.2010,
                                    dt.all.games.football.2010)
-g.olympics.football.2010 <- graph.data.frame(dt.graph.football.2010[, list(Games, Name)],
+
+# Building the graph
+g.olympics.football.2010 <- 
+  graph.data.frame(dt.graph.football.2010[, list(Games, Name)],
                                              directed = F,
                                              vertices = dt.vertices.football.2010)
 
-# Centralities of the network
-# Degree centrality
-V(g.olympics.football.2010)$degree <- degree(g.olympics.football.2010)
-
-# closeness centrality
-V(g.olympics.football.2010)$closeness <- closeness(g.olympics.football.2010)
-
-# betweenness centrality
+# Calculating centrality measures (degree, closenss, betweenness, eigenvector)
+V(g.olympics.football.2010)$degree      <- degree(g.olympics.football.2010)
+V(g.olympics.football.2010)$closeness   <- closeness(g.olympics.football.2010)
 V(g.olympics.football.2010)$betweenness <- betweenness(g.olympics.football.2010)
-
-# eigenvector centrality
-V(g.olympics.football.2010)$evcent <- evcent(g.olympics.football.2010)$vector
+V(g.olympics.football.2010)$evcent      <- evcent(g.olympics.football.2010)$vector
 
 # Show only the athletes that participated in both olympics: boxing
-g.olympics.subgraph <- induced.subgraph(g.olympics, V(g.olympics)[degree > 1])
+g.olympics.boxing.2010.subgraph <- 
+  induced.subgraph(g.olympics.boxing.2010, V(g.olympics.boxing.2010)[degree > 1])
 
 # Show only the athletes that participated in both olympics: Football
-g.olympics.football.2010.subgraph <- induced.subgraph(g.olympics.football.2010, V(g.olympics.football.2010)[degree > 1])
+g.olympics.football.2010.subgraph <- 
+  induced.subgraph(g.olympics.football.2010, V(g.olympics.football.2010)[degree > 1])
 
-# Tables descriptive athletes
-dt.desciptives.table.boxing <- data.table(get.data.frame(g.olympics, "vertices"))
-dt.desciptives.table.football <- data.table(get.data.frame(g.olympics.football.2010, "vertices"))
+# Tables descriptive athletes boxing
+dt.desciptives.table.boxing <- 
+  data.table(get.data.frame(g.olympics.boxing.2010, "vertices"))
+
+# Tables descriptive athletes football
+dt.desciptives.table.football <- 
+  data.table(get.data.frame(g.olympics.football.2010, "vertices"))
