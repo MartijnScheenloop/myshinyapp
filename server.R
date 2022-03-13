@@ -310,18 +310,18 @@ shinyServer(function(input, output, body){
     if (input$network == "Bipartite network: Events and Athletes, boxing"){
       plot_distribution <- ggplot(data.table(get.data.frame(g.olympics.boxing.2010,"vertices"))) + 
         geom_histogram(aes(degree),
-                       binwidth = 1) +
-        ggtitle("Degree distribution boxing") +
-        xlim(0, 5) 
+                       binwidth = 1, fill = "red") +
+        ggtitle("Degree Distribution Boxing") +
+        xlim(0, 5) + theme_classic()
       
     }
     
     if (input$network == "Bipartite network: Events and Athletes, Football"){
       plot_distribution <- ggplot(data.table(get.data.frame(g.olympics.football.2010, "vertices"))) + 
         geom_histogram(aes(degree),
-                       binwidth = 1) +
-        ggtitle("Degree distribution football") + 
-        xlim(0, 5)
+                       binwidth = 1, fill = "blue") +
+        ggtitle("Degree Distribution Football") + 
+        xlim(0, 5) + theme_classic()
     }
     
     plot_distribution

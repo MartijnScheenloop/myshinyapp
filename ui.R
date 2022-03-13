@@ -583,7 +583,7 @@ shinyUI(dashboardPage(
                        h4("Martijn Scheenloop"),
                        img(src = "martijn-modified.png", height = 200, width = 200,
                            style="display: block; margin-left: auto; margin-right: auto;"),
-                       h4("460707"),
+                       h4("460707ms"),
                        h5("Favorite Sporting Event: 100M Dash"),
                        tags$head(tags$style("h4 {color:black; font-weight: bold; text-align:center;}")),
                        tags$head(tags$style("h5 {color:black; font-weight: italic; text-align:center;}")),
