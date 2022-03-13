@@ -70,7 +70,7 @@ shinyUI(dashboardPage(
               tags$head(tags$style("p {font-size: 15px; font-weight: italic; border-style: double;}")),
       ),
       
-      ## Page with Description of Dataset
+      ## Page with Description of Data set
       tabItem(tabName = "dd",
               h1("Description of Dataset"),
               br(),
@@ -370,7 +370,7 @@ shinyUI(dashboardPage(
               p("This page displays the descriptives of the olympic network.
                 The olympic network was to big to create (shiny could not
                 cope with it), so we decided to use the data of two events:
-                Boxing and Football from 2010 and onwards.THe user is able to 
+                Boxing and Football from 2010 and onwards. The user is able to 
                 view the basis descriptions of each network, the centrality
                 measures of each network, an histogram with the degree distributions
                 plotted, and a table that contains all of the centrality measures
@@ -412,6 +412,8 @@ shinyUI(dashboardPage(
                   HTML(strrep(br(), 18)),
                   
                   h2("Degree distribution"),
+                  p("The distribution clearly shows that most athletes participated
+                    in only one olympic event."),
                   plotOutput("distribution"),
                   
                   HTML(strrep(br(), 2)),

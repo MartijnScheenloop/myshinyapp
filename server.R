@@ -355,7 +355,7 @@ shinyServer(function(input, output, body){
     if (input$network == "Bipartite network: Events and Athletes, Football"){
       dt.descriptive.table <- data.table(get.data.frame(g.olympics.football.2010, "vertices"))
     }
-    dt.descriptive.table
+    dt.descriptive.table[, type := NULL]
   }))
   
   output$athletes1 <- DT::renderDataTable(DT::datatable({
