@@ -30,7 +30,7 @@ shinyUI(dashboardPage(
         icon = icon("bar-chart-o"), 
          tabName = "ne",
          menuSubItem("Network Visualization", tabName = "nv"),
-         menuSubItem("Network Descriptive Statistics", tabName = "nds")
+         menuSubItem("Network Descriptives", tabName = "nds")
         ),
       
       menuItem(
@@ -323,7 +323,7 @@ shinyUI(dashboardPage(
               ))),
       
       tabItem(tabName = "nv",
-              titlePanel("Network visualization"),
+              h1("Network Visualization"),
               
               sidebarLayout(
                 
@@ -352,7 +352,7 @@ shinyUI(dashboardPage(
       
       ## Page with Network Descriptives
       tabItem(tabName = "nds",
-              titlePanel("Network descriptives"),
+              h1("Network Descriptives"),
               p("This page displays the descriptives of the olympic network.
                 The olympic network was to big to create (shiny could not
                 cope with it), so we decided to use the data of two events:
@@ -377,7 +377,7 @@ shinyUI(dashboardPage(
                   
                   pickerInput(
                     inputId = "centrality",
-                    label = "Centralities of the network",
+                    label = "Centralities of the Network",
                     choices = c("Degree centrality",
                                 "Closeness centrality",
                                 "Betweenness centrality",
@@ -389,20 +389,24 @@ shinyUI(dashboardPage(
                 
                 mainPanel(
                   column(4,
-                         h2("Descriptive statistics"),
-                         tableOutput("descriptives")),
-                  h2("Centrality statistics"),
+                         h2("Descriptive Statistics"),
+                         tableOutput("descriptives")
+                         ),
+                  
+                  column(4,h2("Centrality Statistics"),
                   tableOutput("centralities"),
-                  br(),
+                  ),
+                  
+                  HTML(strrep(br(), 18)),
+                  
                   h2("Degree distribution"),
                   plotOutput("distribution"),
-                  br(),
+                  
+                  HTML(strrep(br(), 2)),
+                  
                   h2("Centrality statistics for each node"),
                   DT::dataTableOutput("descriptives_table")
                 )
-                
-                
-                
               )),
       
       
@@ -411,19 +415,20 @@ shinyUI(dashboardPage(
       tabItem(tabName = "na1",
               h1("Regions-Events Centrality Analysis"),
               
-              p("This page shows the Regions-Events Network of the dataset This network aims to discover
+              p("This page shows the Regions-Events Network of the dataset. This network aims to discover
                 the relations between the various regions in the dataset and the events they participate in.
                 Every region participates in several sports and events with their athletes, which is what 
                 this network is about. This network shows the regions as nodes that are connected to each 
                 other when they have participated in the same sporting event."),
               
-              p("The table below allows you to investigate how countries are related to other countries in
-                terms of sporting events. It also shows interesting statistics per country, regarding their
+              p("The table and plot below allows you to investigate how countries are related to other countries 
+                in terms of sporting events. The table also shows interesting statistics per country, regarding their
                 participation in the Olympic Games. Countries with a degree of 208 are countries that are 
                 linked to all other countries, meaning that have at least one sporting event in common with 
                 every other country. What is remarkable to see here are high-degree countries with a low
                 number of unique events, such as American Samoa. This indicates that the events they participate
-                in must be quite popular events, since they are connected to many countries with few events."),
+                in must be quite popular, as they are connected to many countries while having participated in 
+                few events."),
               
               fluidRow(
                 column(3,
@@ -443,7 +448,7 @@ shinyUI(dashboardPage(
 
                 column(3,
                        wellPanel(
-                         pickerInput(inputId = "games",
+                         pickerInput(inputId = "games2",
                                      label = "Select the Games",
                                      choices = c("All",sort(unique(dt.olympics[!is.na(Games)]$Games))),
                                      width = "100%",
@@ -473,6 +478,9 @@ shinyUI(dashboardPage(
                 HTML(strrep(br(), 2)),
 
                 h2("Region-Events Network plot"),
+                p("This plot shows the Regions-Events Network, but only when not all sports and not all Games
+                  are selected. When this is the case, the network is too large and therefore not clearly
+                  visible, which is useless when analysing it."),
                 visNetworkOutput("regions.events.graph.plot")
                 )
       ),
@@ -486,52 +494,66 @@ shinyUI(dashboardPage(
               p("This page serves as an auxiliary tool for the previous page. On the previous page, the various
                 centrality measures of Olympic regions could be investigated, along with some participation
                 statistics regarding these countries. This information comes from the Regions-Events Network
-                and can raise questions regarding the events these regions participate in. Therefore, this page
-                shows the most popular events and sports of the Olympics, based on the number of athlete 
-                participations. Given this fact, it must be accounted for that team sporting events naturally
+                and can raise questions regarding the events and sports these regions participate in. Therefore,
+                this page shows the most popular events and sports of the Olympics, based on the number of athlete 
+                participations. Given this fact though, it must be accounted for that team sporting events naturally
                 have many parcticipations, due to their nature, and will thus prove to be quite popular. 
-                The filters allow the users to investigate this for every region and sport."),
+                The filters allow the users to investigate this for every region, sport and Games edition."),
 
               fluidRow(
                 
-                h2("Popular Sports plot"),
-                plotOutput("popular.sports.plot"),
+                column(3,
+                       wellPanel(
+                         pickerInput(inputId = "sport2",
+                                     label = "Select a sport",
+                                     choices = c("All", sort(unique(dt.olympics[!is.na(Sport)]$Sport))),
+                                     width = "100%",
+                                     options = list(`actions-box` = TRUE),
+                                     multiple = F,
+                                     selected = "All")
+                       )
+                ),
+                
+                HTML(strrep(br(), 3)),
+                
+                h2("Popular Sports/Events plot (All regions)"),
+                plotOutput("popular.sports.events.plot"),
                 
                 HTML(strrep(br(), 2)),
                 
-                h2("Popular Events/Sports tables"),
+                h2("Popular Sports/Events tables"),
                 
-                    column(3,
-                           wellPanel(
-                             pickerInput(inputId = "region",
-                                         label = "Select a region",
-                                         choices = c("All", sort(unique(dt.olympics[!is.na(region)]$region))),
-                                         width = "100%",
-                                         options = list(`actions-box` = TRUE),
-                                         multiple = F,
-                                         selected = "All")
-                             )
-                           ),
-                    
-                    # column(3,
-                    #        wellPanel(
-                    #          pickerInput(inputId = "sport",
-                    #                      label = "Select a sport",
-                    #                      choices = c(sort(unique(dt.olympics[!is.na(Sport)]$Sport))),
-                    #                      width = "100%",
-                    #                      options = list(`actions-box` = TRUE),
-                    #                      multiple = T,
-                    #                      selected = "Select All")
-                    #        )
-                    # ),                    
+                column(3,
+                       wellPanel(
+                         pickerInput(inputId = "region",
+                                     label = "Select a region",
+                                     choices = c("All", sort(unique(dt.olympics[!is.na(region)]$region))),
+                                     width = "100%",
+                                     options = list(`actions-box` = TRUE),
+                                     multiple = F,
+                                     selected = "All")
+                       )
+                ),
+                
+                column(3,
+                       wellPanel(
+                         pickerInput(inputId = "games3",
+                                     label = "Select the Games",
+                                     choices = c("All",sort(unique(dt.olympics[!is.na(Games)]$Games))),
+                                     width = "100%",
+                                     options = list(`actions-box` = TRUE),
+                                     multiple = F,
+                                     selected = "All")
+                       )
+                ),
                 
                 HTML(strrep(br(), 8)),
                 
                 column(6,
-                       dataTableOutput("popular.events.table")
+                       dataTableOutput("popular.sports.table")
                        ),
                 column(6,
-                         dataTableOutput("popular.sports.table")
+                         dataTableOutput("popular.events.table")
                        )
                   )
       ),
@@ -581,9 +603,6 @@ shinyUI(dashboardPage(
                        img(src = "rijck-modified.png", height = 200, width = 200, style="display: block; margin-left: auto; margin-right: auto;"),
                        h4("424395nd"),
                        h5("Favorite Sporting Event: Skeleton"),
-                       p("Rijck was formely set out to major in Finance. During the corona pandemic he started a period of self-reflection
-                         which led him to reconsider his decision and choose to major in Business Information Management at the 
-                         Rotterdam School of Management"),
                        tags$head(tags$style("h4 {color:black; font-weight: bold; text-align:center;}")),
                        tags$head(tags$style("h5 {color:black; font-weight: italic; text-align:center;}")),
                 ),

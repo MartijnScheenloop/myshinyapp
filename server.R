@@ -2,12 +2,16 @@
 
 shinyServer(function(input, output, body){
   
+  ### DESCRIPTIVE STATISTICS ###
   # Filters, reactive and passed to renderTexts and table
   tbinput <- reactive({
+    
     data <- dt.all.data
+    
     if (input$sex != "All") {
       data <- data[data$Sex == input$sex,]
     }
+    
     if (input$season != "All") {
       data <- data[data$Season == input$season,]
     }
@@ -15,8 +19,10 @@ shinyServer(function(input, output, body){
     if (input$games != "All") {
       data <- data[data$Games == input$games,]
     }
+    
     data <- data[data$Year >= min(input$years) & data$Year <= max(input$years),]
     data
+    
   })
   
   # Upper statistics of descriptive page
@@ -135,7 +141,9 @@ shinyServer(function(input, output, body){
         plot.title = element_text(size = 18, hjust = 0.5))
   })
   
-  # World Map is created from here #
+  
+  
+  ### WORLD MAP ###
   dt.country.medals$Total_medals =
       paste(dt.country.medals$Country[1:209],
             dt.country.medals$Total_medals[1:209], sep = " - ")
@@ -152,6 +160,9 @@ shinyServer(function(input, output, body){
     )
   })
 
+  
+  
+  ### NETWORK EXPLORATION ###
   output$centralities <- renderTable({
     
     if (input$network == "Bipartite network: Events and Athletes, boxing"){
@@ -398,8 +409,60 @@ shinyServer(function(input, output, body){
     
   }))
 
+  ### NETWORK ANALYSIS: REGION-EVENTS NETWORK ###
+  # Reactive filters for Network Analysis
+  tbinput2 <- reactive({
+    
+    data2  <- dt.olympics
+    
+    if (input$games2 != "All") {
+      data2 <- data2[data2$Games == input$games2,]
+    }
+    
+    if (input$sport != "All") {
+      data2 <- data2[data2$Sport == input$sport,]
+    }
+    data2
+  })
   
   output$regions.events.graph.table <- renderDataTable( {
+    
+    ## Creating a network with regions and common events between regions as edges ##
+    dt.network.analysis <- tbinput2()
+    
+    # Get all unique regions and events and combine them
+    dt.vertices.regions.events <- rbind(dt.network.analysis[, list(name = unique(region), type = FALSE)],
+                                        dt.network.analysis[, list(name = unique(Event), type = TRUE)])
+    
+    # Bipartite graph of Olympic regions and the events they compete in
+    g.regions.events.bipartite <- graph_from_data_frame(dt.network.analysis[,list(region, Event)],
+                                                        directed = FALSE,
+                                                        vertices = dt.vertices.regions.events)
+    
+    # Projection into the region space
+    g.regions.events <- bipartite.projection(g.regions.events.bipartite)$proj1
+    
+    # Calculating centrality measures
+    V(g.regions.events)$degree      <- degree(g.regions.events)
+    V(g.regions.events)$closeness   <- closeness(g.regions.events)
+    V(g.regions.events)$betweenness <- betweenness(g.regions.events)
+    V(g.regions.events)$evcent      <- evcent(g.regions.events)$vector
+    
+    # Creating a data.table with centrality measures
+    dt.regions.events.centr <- data.table(get.data.frame(g.regions.events, what = "vertices"))
+    
+    # Obtaining number of athletes, medals, unique events and sports per region
+    dt.region.numbers <- 
+      dt.network.analysis[, .(n_athletes = length(unique(ID)),
+                               n_medals = sum(!is.na(Medal)),
+                               n_unique_events = length(unique(Event)),
+                               n_unique_sports = length(unique(Sport)),
+                               n_games = length(unique(Games))), 
+                           by = region][order(region)]
+    
+    # Merging the numbers per region with the centrality data.table
+    dt.regions.events.centr <- merge(dt.regions.events.centr, dt.region.numbers,
+                                     by.x = 'name', by.y = 'region')
 
     if (input$centrality.na1 == "Degree") {
       dt.regions.events.centr[, list(name, degree, n_unique_events, n_athletes, 
@@ -423,56 +486,77 @@ shinyServer(function(input, output, body){
   })
   
   output$regions.events.graph.plot <- renderVisNetwork( {
-    if (input$games != "All") {
+    
+    ## Creating a network with regions and common events between regions as edges ##
+    dt.network.analysis <- tbinput2()
+    
+    # Get all unique regions and events and combine them
+    dt.vertices.regions.events <- rbind(dt.network.analysis[, list(name = unique(region), type = FALSE)],
+                                        dt.network.analysis[, list(name = unique(Event), type = TRUE)])
+    
+    # Bipartite graph of Olympic regions and the events they compete in
+    g.regions.events.bipartite <- graph_from_data_frame(dt.network.analysis[,list(region, Event)],
+                                                        directed = FALSE,
+                                                        vertices = dt.vertices.regions.events)
+    
+    # Projection into the region space
+    g.regions.events <- bipartite.projection(g.regions.events.bipartite)$proj1
+    
+    if (input$games2 != "All" & input$sport != "All") {
       
       output.na1 <- visIgraph(g.regions.events)
       
     }
   })
   
-  output$popular.sports.plot <- renderPlot({
+  output$popular.sports.events.plot <- renderPlot({
     
     dt.sport.count <- head(as.data.table(count(dt.olympics, Sport))[order(-n)], 5)
     
-    # PLot of the most popular Sports
-    ggplot(dt.sport.count, aes(x = reorder(Sport,n), y = n)) + geom_bar(stat='identity', fill = "blue") + 
-      coord_flip() + xlab("Sport") + ylab("Number of Participations")
+    dt.event.count <- head(as.data.table(count(filter(dt.olympics, Sport == input$sport2), Event))[order(-n)], 5)
     
+    if (input$sport2 == "All"){
+      # PLot of the most popular Sports
+      ggplot(dt.sport.count, aes(x = reorder(Sport, n), y = n)) + geom_bar(stat = 'identity', fill = "red") + 
+        coord_flip() + xlab("Sport") + ylab("Number of Participations")
+    } else {
+      # PLot of the most popular Events
+      ggplot(dt.event.count, aes(x = reorder(Event, n), y = n)) + geom_bar(stat = 'identity', fill = "blue") + 
+        coord_flip() + xlab("Event") + ylab("Number of Participations")
+    }
   })
   
-  output$popular.events.plot <- renderPlot({
+  output$popular.sports.table <- renderDataTable({
     
-    dt.sport.count <- head(as.data.table(count(dt.olympics, Sport))[order(-n)], 5)
+    dt.p.s.input <- dt.olympics
     
-    # PLot of the most popular Events
-    ggplot(dt.sport.count, aes(x = reorder(Sport,n), y = n)) + geom_bar(stat='identity', fill = "blue") + 
-      coord_flip() + xlab("Sport") + ylab("Number of Participations")
+    if (input$region != "All") {
+      dt.p.s.input <- dt.p.s.input[dt.p.s.input$region == input$region,]
+    }
+    
+    if (input$games3 != "All") {
+      dt.p.s.input <- dt.p.s.input[dt.p.s.input$Games == input$games3,]
+    } 
+    
+    dt.popular.sports <- setnames(
+      as.data.table(count(dt.p.s.input, Sport))[order(-n)], "n", "#Participations")
     
   })
   
   output$popular.events.table <- renderDataTable({
     
-    if (input$region == "All") {
-      dt.p.e.input <- dt.olympics
-    } else {
-      dt.p.e.input <- filter(dt.olympics, region == input$region)
+    dt.p.e.input <- dt.olympics
+    
+    if (input$region != "All") {
+      dt.p.e.input <- dt.p.e.input[dt.p.e.input$region == input$region,]
     }
+    
+    if (input$games3 != "All") {
+      dt.p.e.input <- dt.p.e.input[dt.p.e.input$Games == input$games3,]
+    } 
     
     dt.popular.events <- setnames(
-      as.data.table(count(dt.p.e.input, Event))[order(n)], "n", "#Participations")
-    
-  })
-  
-  output$popular.sports.table <- renderDataTable({
-    
-    if (input$region == "All") {
-      dt.p.s.input <- dt.olympics
-    } else {
-      dt.p.s.input <- filter(dt.olympics, region == input$region)
-    }
-    
-    dt.popular.sports <- setnames(
-      as.data.table(count(dt.p.s.input, Sport))[order(n)], "n", "#Participations")
+      as.data.table(count(dt.p.e.input, Event))[order(-n)], "n", "#Participations")
     
   })
   
