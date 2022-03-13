@@ -171,11 +171,11 @@ shinyServer(function(input, output, body){
                                                              'Median',
                                                              'Mean',
                                                              'Standard deviation'),
-                                               Value = c( min(V(g.olympics)$degree),
-                                                          max(V(g.olympics)$degree),
-                                                          median(V(g.olympics)$degree),
-                                                          mean(V(g.olympics)$degree),
-                                                          sd(V(g.olympics)$degree)))
+                                               Value = c( min(V(g.olympics.boxing.2010)$degree),
+                                                          max(V(g.olympics.boxing.2010)$degree),
+                                                          median(V(g.olympics.boxing.2010)$degree),
+                                                          mean(V(g.olympics.boxing.2010)$degree),
+                                                          sd(V(g.olympics.boxing.2010)$degree)))
       }
       
       if (input$centrality == "Closeness centrality") {
@@ -184,11 +184,11 @@ shinyServer(function(input, output, body){
                                                              'Median',
                                                              'Mean',
                                                              'Standard deviation'),
-                                               Value = c( min(V(g.olympics)$closeness),
-                                                          max(V(g.olympics)$closeness),
-                                                          median(V(g.olympics)$closeness),
-                                                          mean(V(g.olympics)$closeness),
-                                                          sd(V(g.olympics)$closeness)))
+                                               Value = c( min(V(g.olympics.boxing.2010)$closeness),
+                                                          max(V(g.olympics.boxing.2010)$closeness),
+                                                          median(V(g.olympics.boxing.2010)$closeness),
+                                                          mean(V(g.olympics.boxing.2010)$closeness),
+                                                          sd(V(g.olympics.boxing.2010)$closeness)))
       }
       
       if (input$centrality == "Betweenness centrality") {
@@ -197,11 +197,11 @@ shinyServer(function(input, output, body){
                                                              'Median',
                                                              'Mean',
                                                              'Standard deviation'),
-                                               Value = c( min(V(g.olympics)$betweenness),
-                                                          max(V(g.olympics)$betweenness),
-                                                          median(V(g.olympics)$betweenness),
-                                                          mean(V(g.olympics)$betweenness),
-                                                          sd(V(g.olympics)$betweenness)))
+                                               Value = c( min(V(g.olympics.boxing.2010)$betweenness),
+                                                          max(V(g.olympics.boxing.2010)$betweenness),
+                                                          median(V(g.olympics.boxing.2010)$betweenness),
+                                                          mean(V(g.olympics.boxing.2010)$betweenness),
+                                                          sd(V(g.olympics.boxing.2010)$betweenness)))
       }
       
       if (input$centrality == "Eigenvector centrality") {
@@ -210,11 +210,11 @@ shinyServer(function(input, output, body){
                                                              'Median',
                                                              'Mean',
                                                              'Standard deviation'),
-                                               Value = c( min(V(g.olympics)$evcent),
-                                                          max(V(g.olympics)$evcent),
-                                                          median(V(g.olympics)$evcent),
-                                                          mean(V(g.olympics)$evcent),
-                                                          sd(V(g.olympics)$evcent)))
+                                               Value = c( min(V(g.olympics.boxing.2010)$evcent),
+                                                          max(V(g.olympics.boxing.2010)$evcent),
+                                                          median(V(g.olympics.boxing.2010)$evcent),
+                                                          mean(V(g.olympics.boxing.2010)$evcent),
+                                                          sd(V(g.olympics.boxing.2010)$evcent)))
       }}
     
     else if(input$network == "Bipartite network: Events and Athletes, Football") {
@@ -281,12 +281,12 @@ shinyServer(function(input, output, body){
                                                           'Clustering coefficient',
                                                           'Average path length',
                                                           'Diameter'),
-                                            Value = c( gorder(g.olympics),
-                                                       gsize(g.olympics),
-                                                       mean(V(g.olympics)$degree),
-                                                       transitivity(g.olympics, type = "average"),
-                                                       mean(diameter(g.olympics)),
-                                                       diameter(g.olympics)))
+                                            Value = c( gorder(g.olympics.boxing.2010),
+                                                       gsize(g.olympics.boxing.2010),
+                                                       mean(V(g.olympics.boxing.2010)$degree),
+                                                       transitivity(g.olympics.boxing.2010, type = "average"),
+                                                       mean(diameter(g.olympics.boxing.2010)),
+                                                       diameter(g.olympics.boxing.2010)))
     }
     
     if (input$network == "Bipartite network: Events and Athletes, Football") {
@@ -308,18 +308,29 @@ shinyServer(function(input, output, body){
   
   output$distribution <- renderPlot({ 
     if (input$network == "Bipartite network: Events and Athletes, boxing"){
-      plot_distribution <- qplot(V(g.olympics)$degree)
+      plot_distribution <- ggplot(data.table(get.data.frame(g.olympics.boxing.2010,"vertices"))) + 
+        geom_histogram(aes(degree),
+                       binwidth = 1) +
+        ggtitle("Degree distribution boxing") +
+        xlim(0, 5) 
+      
     }
     
     if (input$network == "Bipartite network: Events and Athletes, Football"){
-      plot_distribution <- qplot(V(g.olympics.football.2010)$degree)
+      plot_distribution <- ggplot(data.table(get.data.frame(g.olympics.football.2010, "vertices"))) + 
+        geom_histogram(aes(degree),
+                       binwidth = 1) +
+        ggtitle("Degree distribution football") + 
+        xlim(0, 5)
     }
+    
     plot_distribution
+    
   })
   
   output$mynetwork <- renderVisNetwork({
     if (input$network_choice == "Bipartite network: Events and Athletes, boxing visualization"){
-      g.output <- visIgraph(g.olympics)
+      g.output <- visIgraph(g.olympics.boxing.2010)
     }
     
     if (input$network_choice == "Bipartite network: Events and Athletes, Football visualization"){
@@ -327,7 +338,7 @@ shinyServer(function(input, output, body){
     }
     
     if (input$network_choice == "Boxers that participated in both olympic events"){
-      g.output <- visIgraph(g.olympics.subgraph)
+      g.output <- visIgraph(g.olympics.boxing.2010.subgraph)
     }
     
     if (input$network_choice == "Football players that participated in both olympic events"){
@@ -338,7 +349,7 @@ shinyServer(function(input, output, body){
   
   output$descriptives_table <- DT::renderDataTable(DT::datatable({
     if (input$network == "Bipartite network: Events and Athletes, boxing"){
-      dt.descriptive.table <- data.table(get.data.frame(g.olympics, "vertices"))
+      dt.descriptive.table <- data.table(get.data.frame(g.olympics.boxing.2010, "vertices"))
     }
     
     if (input$network == "Bipartite network: Events and Athletes, Football"){
@@ -349,7 +360,7 @@ shinyServer(function(input, output, body){
   
   output$athletes1 <- DT::renderDataTable(DT::datatable({
     if (input$network_choice == "Boxers that participated in both olympic events"){
-      dt.subgraph <- data.table(get.data.frame(g.olympics.subgraph, "vertices"))
+      dt.subgraph <- data.table(get.data.frame(g.olympics.boxing.2010.subgraph, "vertices"))
       dt.subgraph[, type := NULL][, degree := NULL][, closeness := NULL][, betweenness := NULL][, evcent := NULL]
     }
     

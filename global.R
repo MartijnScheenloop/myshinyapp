@@ -73,7 +73,9 @@ dt.country.medals <- subset(dt.country.medals, select =
                               c(region, Bronze_medals, Silver_medals, Gold_medals))
 
 dt.country.medals$Total_medals <- rowSums(dt.country.medals
-                                         [, c("Bronze_medals", "Silver_medals", "Gold_medals")])
+                                         [, c("Bronze_medals",
+                                              "Silver_medals",
+                                              "Gold_medals")])
 
 # Change the column names for rworldmap compatability
 colnames(dt.country.medals)[1] <- "Country"

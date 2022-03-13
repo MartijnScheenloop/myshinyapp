@@ -322,8 +322,24 @@ shinyUI(dashboardPage(
                 htmlOutput("wm"), width = "100%"
               ))),
       
+      ## Page with network visualizations
       tabItem(tabName = "nv",
               h1("Network Visualization"),
+              p("This page visualizes the several different networks which are further
+                analysed in the network description page. There are four network displayed:
+                (1) Bipartite network: Events and Athletes, boxing visualization,
+                (2) Bipartite network: Events and Athletes, Football visualization, 
+                (3) Boxers that participated in both olympic events,
+                (4) Football players that participated in both olympic events. 
+                We made the choice to focus on Boxing and Football for all olympic
+                games after 2010. We made this decision because these graphs are visualized 
+                quickly within shiny whereas a large graph would cause delays.
+                Note that the code is structured in such manner that this
+                can easily be changed to different events and games. The page also shows
+                two visualization of all the athletes that have participated in both olympic games 
+                for boxing and football. To view the network more in depth, hover over the 
+                graph and use your mousewheel (or trackpad) to zoom in and out of the network to
+                see the name of each individual athlete and the olympic game he or she is connceted to."),
               sidebarLayout(
                 sidebarPanel(
                   pickerInput(
