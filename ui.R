@@ -42,7 +42,7 @@ shinyUI(dashboardPage(
         ),
       
       menuItem(
-        "About the Creators",
+        "About Us",
          tabName = "atc",
         icon = icon("fa-solid fa-address-book"))
   )),
@@ -70,7 +70,7 @@ shinyUI(dashboardPage(
               tags$head(tags$style("p {font-size: 15px; font-weight: italic; border-style: double;}")),
       ),
       
-      ## Page with description of dataset
+      ## Page with Description of Dataset
       tabItem(tabName = "dd",
               h1("Description of Dataset"),
               br(),
@@ -174,7 +174,9 @@ shinyUI(dashboardPage(
               ),
       ),
       
-      ## Page with descriptive statistics
+      
+      
+      ## Page with Summary Statistics
       tabItem(tabName = "ss",
               h1("Summary Statistics"),
               
@@ -240,7 +242,6 @@ shinyUI(dashboardPage(
                 )
               ),
               
-              # filters set up
               fluidRow(
                 column(6,
                        sliderInput(
@@ -284,7 +285,6 @@ shinyUI(dashboardPage(
                 
                 HTML(strrep(br(), 5)),
                 
-                # table and two plots set up here
                 h2("Medal Statistics"),
                   DT::dataTableOutput("table"),
                 br(),
@@ -296,7 +296,6 @@ shinyUI(dashboardPage(
                          wellPanel(
                            plotOutput("top10plotyears")))),
                 
-                # description set up here
                 column(width = 9,
                        p("It first must be noted that the medals counts found in the tabel are the sum of the all the medals received
                          by a country's atheletes. Meaning that if a football teams wins gold this counts as 11 gold medals instead of
@@ -312,7 +311,9 @@ shinyUI(dashboardPage(
               )
       ),
       
-      # Worldmap is created here #
+      
+      
+      ## Page with Worldmap
       tabItem(tabName = "wm",
               h1("World Map"),
               fluidRow(box(
@@ -348,6 +349,8 @@ shinyUI(dashboardPage(
       ),
       
       
+      
+      ## Page with Network Descriptives
       tabItem(tabName = "nds",
               titlePanel("Network descriptives"),
               p("This page displays the descriptives of the olympic network.
@@ -402,6 +405,9 @@ shinyUI(dashboardPage(
                 
               )),
       
+      
+      
+      ## Page with Network Analysis
       tabItem(tabName = "na1",
               h1("Regions-Events Centrality Analysis"),
               
@@ -471,6 +477,9 @@ shinyUI(dashboardPage(
                 )
       ),
 
+      
+      
+      ## Page with further Network Analysis
       tabItem(tabName = "na2",
               h1("Regions-Events Network Popular Sports/Events"),
 
@@ -527,7 +536,9 @@ shinyUI(dashboardPage(
                   )
       ),
       
-      # About us page content #
+      
+      
+      ## Page with information regarding the creators
       tabItem(tabName = "atc",
               h1("About Us"),
               h3("We are the team of students that have created this application.
